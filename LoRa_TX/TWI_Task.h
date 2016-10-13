@@ -9,13 +9,13 @@
 #ifndef TWI_TASK_H_
 #define TWI_TASK_H_
 
-// TWI #0 initialize.
-void TWI0_Init( void );
-// TWI #0 write task trigger on.
-void TWI0_On_Write( void );
-// TWI #0 read task trigger on.
-void TWI0_On_Read( void );
-// TWI #0 task.
-void TWI0_Task( void );
+// TWI #1 initialize.
+void TWI1_Init( void );
+// TWI #1 write task trigger on.
+void TWI1_On_Write( void );
+// TWI #1 read task trigger on.
+void TWI1_On_Read( void );
+// TWI #1 task.
+void TWI1_Task( void );
 
 #endif /* TWI_TASK_H_ */

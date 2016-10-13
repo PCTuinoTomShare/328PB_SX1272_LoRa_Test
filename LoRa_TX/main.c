@@ -42,7 +42,7 @@ int main(void)
 	// SPI initialize.
 	SPI_Init();
 	// TWI initialize.
-	TWI0_Init();
+	TWI1_Init();
 	// Timer #0 initialize.
 	Timer0_Init();
 	// Enable global interrupt.
@@ -85,7 +85,7 @@ int main(void)
 		// ADC task.
 		ADC_Task();
 		// TWI task.
-		TWI0_Task();		
+		TWI1_Task();		
 		// SPI task.
 		SPI_Task();		
 		// LoRa task.

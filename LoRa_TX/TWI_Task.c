@@ -9,41 +9,41 @@
 #include "TWI_Task.h"
 #include "var.h"
 
-// TWI #0 initialize.
-void TWI0_Init( void )
+// TWI #1 initialize.
+void TWI1_Init( void )
 {
 	//TWI ( I2C also ).
 	// - 100KHz @ 8MHz.
-	TWBR0 = 32;
+	TWBR1 = 32;
 }
 
-// TWI #0 write task trigger on.
-void TWI0_On_Write( void )
+// TWI #1 write task trigger on.
+void TWI1_On_Write( void )
 {
 	// Reset task counter.
-	twi0_task_cnt = 1;
+	twi1_task_cnt = 1;
 	// Set busy flag bit.
-	twi0_task_status |= 0x01;
+	twi1_task_status |= 0x01;
 	// Send start condition.
-	TWCR0 = 0xa4;	
+	TWCR1 = 0xa4;	
 }
 
-// TWI #0 read task trigger on.
-void TWI0_On_Read( void )
+// TWI #1 read task trigger on.
+void TWI1_On_Read( void )
 {
 	// Reset task counter.
-	twi0_task_cnt = 6;
+	twi1_task_cnt = 6;
 	// Set busy flag bit.
-	twi0_task_status |= 0x01;	
+	twi1_task_status |= 0x01;	
 	// Send start condition.
-	TWCR0 = 0xa4;	
+	TWCR1 = 0xa4;	
 }
 
-// TWI #0 task.
-void TWI0_Task( void )
+// TWI #1 task.
+void TWI1_Task( void )
 {
 	// Check interrupt flag.
-	temp1 = TWCR0;
+	temp1 = TWCR1;
 	temp1 &= 0x80;
 	if( temp1 == 0x00 ){
 		return;
@@ -52,20 +52,20 @@ void TWI0_Task( void )
 	//TWCR |= 0x80;
 	
 	// Get status code.
-	temp1 = TWSR0;
+	temp1 = TWSR1;
 	temp1 &= 0xf8;
 	
-	switch( twi0_task_cnt ){
+	switch( twi1_task_cnt ){
 		
 		// SLA + W was send.
 		case 12:
 		// Send control word.
-		TWDR0 = twi0_word;
+		TWDR1 = twi1_word;
 		// 1.) Clear interrupt flag,
 		// 2.) and trigger on.
-		TWCR0 = 0x84;
+		TWCR1 = 0x84;
 		// Next task.
-		++twi0_task_cnt;
+		++twi1_task_cnt;
 		break;
 		
 		// Control word was send.
@@ -74,9 +74,9 @@ void TWI0_Task( void )
 		// 1.) Clear interrupt flag,
 		// 2.) Start condition.
 		// 3.) and trigger on.
-		TWCR0 = 0xa4;
+		TWCR1 = 0xa4;
 		// Next task.
-		++twi0_task_cnt;
+		++twi1_task_cnt;
 		break;
 		
 		// SLA+R was send.
@@ -89,19 +89,19 @@ void TWI0_Task( void )
 			// 1.) Clear interrupt flag,
 			// 2.) stop condition,
 			// 3.) trigger on TWI.
-			TWCR0 = 0x94;
+			TWCR1 = 0x94;
 			// Clear flag bit.
-			twi0_task_status &= 0xfe;
+			twi1_task_status &= 0xfe;
 			// NACK check.
-			twi0_task_cnt = 0;
+			twi1_task_cnt = 0;
 			return;
 		}
 		// 1.) Clear interrupt flag.
 		// 2.) Prepare received data and return ACK.
 		// 3.) Trigger on.
-		TWCR0 = 0xC4;
+		TWCR1 = 0xC4;
 		// Next task.
-		++twi0_task_cnt;
+		++twi1_task_cnt;
 		break;
 		
 		// Received data.
@@ -110,28 +110,28 @@ void TWI0_Task( void )
 		// check status data received and ACK return.
 		
 		// Hold shifter data.
-		twi0_data[twi0_data_index] = TWDR0;
+		twi1_data[twi1_data_index] = TWDR1;
 		// Next byte data.
-		++twi0_data_index;
-		--twi0_data_cnt;
+		++twi1_data_index;
+		--twi1_data_cnt;
 		
 		// Check data counter.
-		if( twi0_data_cnt == 1 ){
+		if( twi1_data_cnt == 1 ){
 			// Last data will receive.
 			// Prepare receive first byte data.
 			
 			// 1.) Clear interrupt flag.
 			// 2.) Received data and return NACK.
 			// 3.) Trigger on.
-			TWCR0 = 0x84;
+			TWCR1 = 0x84;
 			// Next task.
-			++twi0_task_cnt;
+			++twi1_task_cnt;
 		}
 		else{
 			// 1.) Clear interrupt flag.
 			// 2.) Received data and return ACK.
 			// 3.) Trigger on.
-			TWCR0 = 0xC4;
+			TWCR1 = 0xC4;
 		}
 		break;
 
@@ -139,18 +139,18 @@ void TWI0_Task( void )
 		case 17:
 		case 9:
 		// Hold shifter data.
-		twi0_data[twi0_data_index] = TWDR0;
+		twi1_data[twi1_data_index] = TWDR1;
 		// All data send.
 		case 3:
 		// Stop condition out.
 		// 1.) Clear interrupt flag,
 		// 2.) stop condition,
 		// 3.) trigger on TWI.
-		TWCR0 = 0x94;
+		TWCR1 = 0x94;
 		// Clear flag bit.
-		twi0_task_status &= 0xfe;
+		twi1_task_status &= 0xfe;
 		// Next task.
-		++twi0_task_cnt;
+		++twi1_task_cnt;
 		break;
 		
 		// SLA+W was send or
@@ -160,18 +160,18 @@ void TWI0_Task( void )
 		// Only ACK.
 		if( temp1 == 0x18 || temp1 == 0x28 ){
 			// Send data.
-			TWDR0 = twi0_data[twi0_data_index];
+			TWDR1 = twi1_data[twi1_data_index];
 			// 1.) Clear interrupt flag,
 			// 2.) and trigger on.
-			TWCR0 = 0x84;
+			TWCR1 = 0x84;
 			// Next data.
-			--twi0_data_cnt;
-			++twi0_data_index;
-			if( twi0_data_cnt != 0 ){
+			--twi1_data_cnt;
+			++twi1_data_index;
+			if( twi1_data_cnt != 0 ){
 				return;
 			}
 			// Next task.
-			++twi0_task_cnt;
+			++twi1_task_cnt;
 			return;
 		}
 		else if( temp1 == 0x20 ){
@@ -179,12 +179,12 @@ void TWI0_Task( void )
 			// 1.) Clear interrupt flag,
 			// 2.) stop condition,
 			// 3.) trigger on TWI.
-			TWCR0 = 0x94;
+			TWCR1 = 0x94;
 			// Clear flag bit.
-			twi0_task_status &= 0xfe;
+			twi1_task_status &= 0xfe;
 		}
 		// Error check.
-		twi0_task_cnt = 0;
+		twi1_task_cnt = 0;
 		break;
 		
 		case 20: // <--- for HIH6130 start measurement.
@@ -192,34 +192,34 @@ void TWI0_Task( void )
 			// 1.) Clear interrupt flag,
 			// 2.) stop condition,
 			// 3.) trigger on TWI.
-			TWCR0 = 0x94;
+			TWCR1 = 0x94;
 			// Clear flag bit.
-			twi0_task_status &= 0xfe;
+			twi1_task_status &= 0xfe;
 			// Next task.
-			++twi0_task_cnt;			
+			++twi1_task_cnt;			
 			break;
 		
 		// Start condition was send.
 		case 14:
-		twi0_addr |= 0x01;
+		twi1_addr |= 0x01;
 		case 19:	// <--- for HIH6130 only write SLA + W to start measure.
 		case 11:
 		case 6:
 		case 1:
 		// Error check.
 		if( temp1 != 0x08 ){
-			twi0_task_cnt = 0;
+			twi1_task_cnt = 0;
 			return;
 		}
 		// Send SLA + W or SLA + R.
-		TWDR0 = twi0_addr;
+		TWDR1 = twi1_addr;
 		// 1.) Clear interrupt flag,
 		// 2.) and trigger on.
-		TWCR0 = 0x84;
+		TWCR1 = 0x84;
 		// Clear data index.
-		twi0_data_index = 0;
+		twi1_data_index = 0;
 		// Next task.
-		++twi0_task_cnt;
+		++twi1_task_cnt;
 		break;
 	}
 }

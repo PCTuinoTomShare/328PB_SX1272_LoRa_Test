@@ -6,7 +6,15 @@
  */ 
 
 #include <stdint.h>
+
+// For ATSAMD21G18A device.
+#ifdef __SAMD21G18A__
+#include <asf.h>
+#else
+// AVR device.
 #include <avr/io.h>
+#endif
+
 #include "Lora_Task.h"
 #include "SPI_Task.h"
 #include "IO_Task.h"
@@ -360,31 +368,67 @@ void SX1272_Set_Freq( void )
 // SX1272 RX switch on.
 void SX1272_RX_Switch_On( void )
 {
+	// SAMD21G18A
+#ifdef __SAMD21G18A__	
+	// TxSwitch off.
+	PORT->Group[1].OUTCLR.reg = 0x00000004;
+	// RxSwitch on.	
+	PORT->Group[1].OUTSET.reg = 0x00000008;
+#endif	
+	// ATmega328PB
+#ifdef _AVR_ATMEGA328PB_H_INCLUDED		
 	PORTB &= 0xfe;					// TX_Switch output low.	
 	PORTD |= 0x80;					// RX_Switch output high.
+#endif	
 }
 
 // SX1272 TX switch on.
 void SX1272_TX_Switch_On( void )
 {
+	// SAMD21G18A
+#ifdef __SAMD21G18A__	
+	// RxSwitch off.
+	PORT->Group[1].OUTCLR.reg = 0x00000008;
+	// TxSwitch on.	
+	PORT->Group[1].OUTSET.reg = 0x00000004;
+#endif	
+	// ATmega328PB
+#ifdef _AVR_ATMEGA328PB_H_INCLUDED		
 	PORTD &= 0x7f;					// RX_Switch output low.		
 	PORTB |= 0x01;					// TX_Switch output high.
+#endif	
 }
 
 // SX1272 Reset on.
 void SX1272_Reset_On( void )
 {
 	// SX1272 Reset output high.
+	// SAMD21G18A	
+#ifdef __SAMD21G18A__	
+	PORT->Group[1].OUTSET.reg = 0x00400000;
+	PORT->Group[1].DIRSET.reg = 0x00400000;	
+#endif	
+	// ATmega328PB
+#ifdef _AVR_ATMEGA328PB_H_INCLUDED	
 	PORTC |= 0x04;
-	DDRC |= 0x04;	
+	DDRC |= 0x04;
+#endif		
 }
 
 // SX1272 Reset off.
 void SX1272_Reset_Off( void )
 {
 	// Reset inactive, IO port keep High impedance.
+	// SAMD21G18A
+#ifdef __SAMD21G18A__	
+	PORT->Group[1].OUTCLR.reg = 0x00400000;
+	PORT->Group[1].DIRCLR.reg = 0x00400000;	
+#endif	
+	// ATmega328PB
+#ifdef _AVR_ATMEGA328PB_H_INCLUDED	
 	PORTC &= 0xfb;	// Output low.
-	DDRC &= 0xfb;   // Input port.	
+	DDRC &= 0xfb;   // Input port.
+#endif		
 }
 
 // Single register access trigger on, for polling task  trigger on.

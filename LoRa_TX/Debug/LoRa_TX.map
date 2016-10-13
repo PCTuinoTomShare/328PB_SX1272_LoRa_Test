@@ -18,23 +18,22 @@ c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/..
 Allocating common symbols
 Common symbol       size              file
 
-twi0_data_cnt       0x1               ADC_Task.o
-twi0_task_cnt       0x1               ADC_Task.o
-twi0_task_status    0x1               ADC_Task.o
+twi1_task_cnt       0x1               ADC_Task.o
 spi_data_cnt        0x1               ADC_Task.o
 temp2               0x1               ADC_Task.o
 rf_rx_data          0xc               ADC_Task.o
-twi0_data           0x8               ADC_Task.o
+twi1_word           0x1               ADC_Task.o
 uart0_trn_ptr       0x2               ADC_Task.o
 spi_status_flag     0x1               ADC_Task.o
 spi_trn_data        0x20              ADC_Task.o
-twi0_data_index     0x1               ADC_Task.o
 temp5               0x4               ADC_Task.o
+twi1_task_status    0x1               ADC_Task.o
 adc_value           0x1               ADC_Task.o
 temp6               0x4               ADC_Task.o
 temp1               0x1               ADC_Task.o
-twi0_word           0x1               ADC_Task.o
+twi1_data           0x8               ADC_Task.o
 lora_task_flag      0x1               ADC_Task.o
+twi1_addr           0x1               ADC_Task.o
 lora_para_index     0x1               ADC_Task.o
 temp4               0x1               ADC_Task.o
 spi_rec_data        0x20              ADC_Task.o
@@ -43,10 +42,11 @@ lora_para_cnt       0x1               ADC_Task.o
 rf_tx_data          0xc               ADC_Task.o
 lora_tx_task_cnt    0x1               ADC_Task.o
 lora_rx_task_cnt    0x1               ADC_Task.o
+twi1_data_index     0x1               ADC_Task.o
 temp3               0x1               ADC_Task.o
 dev_task_cnt        0x1               ADC_Task.o
 spi_rec_ptr         0x2               ADC_Task.o
-twi0_addr           0x1               ADC_Task.o
+twi1_data_cnt       0x1               ADC_Task.o
 delay_cnt           0x1               ADC_Task.o
 
 Discarded input sections
@@ -345,7 +345,7 @@ END GROUP
                 0x00000000                __vectors
  *(.vectors)
  *(.progmem.gcc*)
- .progmem.gcc_sw_table.TWI0_Task
+ .progmem.gcc_sw_table.TWI1_Task
                 0x000000b4       0x28 TWI_Task.o
                 0x000000dc                . = ALIGN (0x2)
                 0x000000dc                __trampolines_start = .
@@ -504,18 +504,18 @@ END GROUP
  .text.Timer0_Task
                 0x000006ca       0x1e Timer_Task.o
                 0x000006ca                Timer0_Task
- .text.TWI0_Init
+ .text.TWI1_Init
                 0x000006e8        0x8 TWI_Task.o
-                0x000006e8                TWI0_Init
- .text.TWI0_On_Write
+                0x000006e8                TWI1_Init
+ .text.TWI1_On_Write
                 0x000006f0       0x18 TWI_Task.o
-                0x000006f0                TWI0_On_Write
- .text.TWI0_On_Read
+                0x000006f0                TWI1_On_Write
+ .text.TWI1_On_Read
                 0x00000708       0x18 TWI_Task.o
-                0x00000708                TWI0_On_Read
- .text.TWI0_Task
+                0x00000708                TWI1_On_Read
+ .text.TWI1_Task
                 0x00000720      0x1a4 TWI_Task.o
-                0x00000720                TWI0_Task
+                0x00000720                TWI1_Task
  .text.libgcc.div
                 0x000008c4       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
                 0x000008c4                __udivmodsi4
@@ -577,35 +577,35 @@ END GROUP
  *(.bss*)
  *(COMMON)
  COMMON         0x00800136       0x82 ADC_Task.o
-                0x00800136                twi0_data_cnt
-                0x00800137                twi0_task_cnt
-                0x00800138                twi0_task_status
-                0x00800139                spi_data_cnt
-                0x0080013a                temp2
-                0x0080013b                rf_rx_data
-                0x00800147                twi0_data
-                0x0080014f                uart0_trn_ptr
-                0x00800151                spi_status_flag
-                0x00800152                spi_trn_data
-                0x00800172                twi0_data_index
-                0x00800173                temp5
-                0x00800177                adc_value
-                0x00800178                temp6
-                0x0080017c                temp1
-                0x0080017d                twi0_word
-                0x0080017e                lora_task_flag
-                0x0080017f                lora_para_index
-                0x00800180                temp4
-                0x00800181                spi_rec_data
-                0x008001a1                spi_trn_ptr
-                0x008001a3                lora_para_cnt
-                0x008001a4                rf_tx_data
-                0x008001b0                lora_tx_task_cnt
-                0x008001b1                lora_rx_task_cnt
+                0x00800136                twi1_task_cnt
+                0x00800137                spi_data_cnt
+                0x00800138                temp2
+                0x00800139                rf_rx_data
+                0x00800145                twi1_word
+                0x00800146                uart0_trn_ptr
+                0x00800148                spi_status_flag
+                0x00800149                spi_trn_data
+                0x00800169                temp5
+                0x0080016d                twi1_task_status
+                0x0080016e                adc_value
+                0x0080016f                temp6
+                0x00800173                temp1
+                0x00800174                twi1_data
+                0x0080017c                lora_task_flag
+                0x0080017d                twi1_addr
+                0x0080017e                lora_para_index
+                0x0080017f                temp4
+                0x00800180                spi_rec_data
+                0x008001a0                spi_trn_ptr
+                0x008001a2                lora_para_cnt
+                0x008001a3                rf_tx_data
+                0x008001af                lora_tx_task_cnt
+                0x008001b0                lora_rx_task_cnt
+                0x008001b1                twi1_data_index
                 0x008001b2                temp3
                 0x008001b3                dev_task_cnt
                 0x008001b4                spi_rec_ptr
-                0x008001b6                twi0_addr
+                0x008001b6                twi1_data_cnt
                 0x008001b7                delay_cnt
                 0x008001b8                PROVIDE (__bss_end, .)
                 0x0000094c                __data_load_start = LOADADDR (.data)

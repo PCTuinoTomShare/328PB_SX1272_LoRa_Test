@@ -146,9 +146,9 @@ void ADC_Init( void )
 {
 	// Reference on VACC.
 	// Data right align.
-	// ADC3.
-	ADMUX = 0x63;
- 11a:	83 e6       	ldi	r24, 0x63	; 99
+	// ADC5.
+	ADMUX = 0x65;
+ 11a:	85 e6       	ldi	r24, 0x65	; 101
  11c:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x7e007c>
 	// Power reduction ADC off, for ADC.
 	PRR0 &= 0xfe;
@@ -181,7 +181,7 @@ void ADC_Task( void )
  13a:	80 91 7a 00 	lds	r24, 0x007A	; 0x80007a <__TEXT_REGION_LENGTH__+0x7e007a>
 	temp1 &= 0x10;
  13e:	80 71       	andi	r24, 0x10	; 16
- 140:	80 93 7c 01 	sts	0x017C, r24	; 0x80017c <temp1>
+ 140:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp1>
 	if( temp1 == 0 ){
  144:	88 23       	and	r24, r24
  146:	61 f0       	breq	.+24     	; 0x160 <ADC_Task+0x26>
@@ -197,7 +197,7 @@ void ADC_Task( void )
 	// Keep ADC value.
 	adc_value = ADCH;	
  152:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7e0079>
- 156:	80 93 77 01 	sts	0x0177, r24	; 0x800177 <adc_value>
+ 156:	80 93 6e 01 	sts	0x016E, r24	; 0x80016e <adc_value>
 	// Start conversion.
 	ADCSRA |= 0x40;	
  15a:	80 81       	ld	r24, Z
@@ -228,11 +228,11 @@ void Device_Task( void ){
 	}
 		
 	// TWI task busy check.
-	temp1 = twi0_task_status;
+	temp1 = twi1_task_status;
 	temp1 &= 0x01;
- 176:	80 91 38 01 	lds	r24, 0x0138	; 0x800138 <twi0_task_status>
+ 176:	80 91 6d 01 	lds	r24, 0x016D	; 0x80016d <twi1_task_status>
  17a:	81 70       	andi	r24, 0x01	; 1
- 17c:	80 93 7c 01 	sts	0x017C, r24	; 0x80017c <temp1>
+ 17c:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp1>
 	if( temp1 ){
  180:	81 11       	cpse	r24, r1
  182:	c6 c0       	rjmp	.+396    	; 0x310 <Device_Task+0x1ae>
@@ -242,11 +242,11 @@ void Device_Task( void ){
 	
 	// Check LoRa TX busy bit.
 	temp1 = lora_task_flag;
- 184:	90 91 7e 01 	lds	r25, 0x017E	; 0x80017e <lora_task_flag>
+ 184:	90 91 7c 01 	lds	r25, 0x017C	; 0x80017c <lora_task_flag>
 	temp1 &= 0x01;
  188:	89 2f       	mov	r24, r25
  18a:	81 70       	andi	r24, 0x01	; 1
- 18c:	80 93 7c 01 	sts	0x017C, r24	; 0x80017c <temp1>
+ 18c:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp1>
 	if( temp1 ){
  190:	81 11       	cpse	r24, r1
  192:	be c0       	rjmp	.+380    	; 0x310 <Device_Task+0x1ae>
@@ -303,8 +303,8 @@ void Device_Task( void ){
 		case 2:
 			// Prepare TX data.
 			// HIH6130 humidity.
-			temp5 = twi0_data[0];
- 1dc:	c7 e4       	ldi	r28, 0x47	; 71
+			temp5 = twi1_data[0];
+ 1dc:	c4 e7       	ldi	r28, 0x74	; 116
  1de:	d1 e0       	ldi	r29, 0x01	; 1
  1e0:	28 81       	ld	r18, Y
  1e2:	82 2f       	mov	r24, r18
@@ -323,7 +323,7 @@ void Device_Task( void ){
  1f8:	5f 73       	andi	r21, 0x3F	; 63
  1fa:	66 27       	eor	r22, r22
  1fc:	77 27       	eor	r23, r23
-			temp5 |= twi0_data[1];		
+			temp5 |= twi1_data[1];		
  1fe:	89 81       	ldd	r24, Y+1	; 0x01
  200:	9a 01       	movw	r18, r20
  202:	ab 01       	movw	r20, r22
@@ -345,9 +345,9 @@ void Device_Task( void ){
  220:	96 01       	movw	r18, r12
  222:	0e 94 62 04 	call	0x8c4	; 0x8c4 <__udivmodsi4>
 			rf_tx_data[0] = (uint8_t)temp5;		
- 226:	20 93 a4 01 	sts	0x01A4, r18	; 0x8001a4 <rf_tx_data>
+ 226:	20 93 a3 01 	sts	0x01A3, r18	; 0x8001a3 <rf_tx_data>
 			// HIH6130 temperature.
-			temp5 = twi0_data[2];
+			temp5 = twi1_data[2];
  22a:	4a 81       	ldd	r20, Y+2	; 0x02
  22c:	50 e0       	ldi	r21, 0x00	; 0
  22e:	60 e0       	ldi	r22, 0x00	; 0
@@ -358,7 +358,7 @@ void Device_Task( void ){
  234:	65 2f       	mov	r22, r21
  236:	54 2f       	mov	r21, r20
  238:	44 27       	eor	r20, r20
-			temp5 |= twi0_data[3];
+			temp5 |= twi1_data[3];
  23a:	8b 81       	ldd	r24, Y+3	; 0x03
  23c:	48 2b       	or	r20, r24
 			temp5 >>= 2;
@@ -381,7 +381,7 @@ void Device_Task( void ){
  25c:	96 01       	movw	r18, r12
  25e:	0e 94 62 04 	call	0x8c4	; 0x8c4 <__udivmodsi4>
 			temp1 = 0x00;		// Minus Sign.
- 262:	10 92 7c 01 	sts	0x017C, r1	; 0x80017c <temp1>
+ 262:	10 92 73 01 	sts	0x0173, r1	; 0x800173 <temp1>
 			if( temp5 < 40 ){
  266:	28 32       	cpi	r18, 0x28	; 40
  268:	31 05       	cpc	r19, r1
@@ -389,10 +389,10 @@ void Device_Task( void ){
  26c:	51 05       	cpc	r21, r1
  26e:	e0 f4       	brcc	.+56     	; 0x2a8 <Device_Task+0x146>
 				temp6 = temp5;
- 270:	20 93 78 01 	sts	0x0178, r18	; 0x800178 <temp6>
- 274:	30 93 79 01 	sts	0x0179, r19	; 0x800179 <temp6+0x1>
- 278:	40 93 7a 01 	sts	0x017A, r20	; 0x80017a <temp6+0x2>
- 27c:	50 93 7b 01 	sts	0x017B, r21	; 0x80017b <temp6+0x3>
+ 270:	20 93 6f 01 	sts	0x016F, r18	; 0x80016f <temp6>
+ 274:	30 93 70 01 	sts	0x0170, r19	; 0x800170 <temp6+0x1>
+ 278:	40 93 71 01 	sts	0x0171, r20	; 0x800171 <temp6+0x2>
+ 27c:	50 93 72 01 	sts	0x0172, r21	; 0x800172 <temp6+0x3>
 				temp5 = 40;
 				temp5 -= temp6;
  280:	88 e2       	ldi	r24, 0x28	; 40
@@ -403,13 +403,13 @@ void Device_Task( void ){
  28a:	93 0b       	sbc	r25, r19
  28c:	a4 0b       	sbc	r26, r20
  28e:	b5 0b       	sbc	r27, r21
- 290:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp5>
- 294:	90 93 74 01 	sts	0x0174, r25	; 0x800174 <temp5+0x1>
- 298:	a0 93 75 01 	sts	0x0175, r26	; 0x800175 <temp5+0x2>
- 29c:	b0 93 76 01 	sts	0x0176, r27	; 0x800176 <temp5+0x3>
+ 290:	80 93 69 01 	sts	0x0169, r24	; 0x800169 <temp5>
+ 294:	90 93 6a 01 	sts	0x016A, r25	; 0x80016a <temp5+0x1>
+ 298:	a0 93 6b 01 	sts	0x016B, r26	; 0x80016b <temp5+0x2>
+ 29c:	b0 93 6c 01 	sts	0x016C, r27	; 0x80016c <temp5+0x3>
 				temp1 = 0x80;
  2a0:	80 e8       	ldi	r24, 0x80	; 128
- 2a2:	80 93 7c 01 	sts	0x017C, r24	; 0x80017c <temp1>
+ 2a2:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp1>
  2a6:	0d c0       	rjmp	.+26     	; 0x2c2 <Device_Task+0x160>
 			}
 			else{
@@ -419,22 +419,22 @@ void Device_Task( void ){
  2ac:	88 97       	sbiw	r24, 0x28	; 40
  2ae:	a1 09       	sbc	r26, r1
  2b0:	b1 09       	sbc	r27, r1
- 2b2:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp5>
- 2b6:	90 93 74 01 	sts	0x0174, r25	; 0x800174 <temp5+0x1>
- 2ba:	a0 93 75 01 	sts	0x0175, r26	; 0x800175 <temp5+0x2>
- 2be:	b0 93 76 01 	sts	0x0176, r27	; 0x800176 <temp5+0x3>
+ 2b2:	80 93 69 01 	sts	0x0169, r24	; 0x800169 <temp5>
+ 2b6:	90 93 6a 01 	sts	0x016A, r25	; 0x80016a <temp5+0x1>
+ 2ba:	a0 93 6b 01 	sts	0x016B, r26	; 0x80016b <temp5+0x2>
+ 2be:	b0 93 6c 01 	sts	0x016C, r27	; 0x80016c <temp5+0x3>
 			}		
 			rf_tx_data[1] = (uint8_t)temp5;
 			rf_tx_data[1] |= temp1;
- 2c2:	e4 ea       	ldi	r30, 0xA4	; 164
+ 2c2:	e3 ea       	ldi	r30, 0xA3	; 163
  2c4:	f1 e0       	ldi	r31, 0x01	; 1
- 2c6:	90 91 73 01 	lds	r25, 0x0173	; 0x800173 <temp5>
- 2ca:	80 91 7c 01 	lds	r24, 0x017C	; 0x80017c <temp1>
+ 2c6:	90 91 69 01 	lds	r25, 0x0169	; 0x800169 <temp5>
+ 2ca:	80 91 73 01 	lds	r24, 0x0173	; 0x800173 <temp1>
  2ce:	89 2b       	or	r24, r25
  2d0:	81 83       	std	Z+1, r24	; 0x01
 			// ADC data.
 			rf_tx_data[2] = adc_value;
- 2d2:	80 91 77 01 	lds	r24, 0x0177	; 0x800177 <adc_value>
+ 2d2:	80 91 6e 01 	lds	r24, 0x016E	; 0x80016e <adc_value>
  2d6:	82 83       	std	Z+2, r24	; 0x02
 			// Next task.
 			++dev_task_cnt;
@@ -449,7 +449,7 @@ void Device_Task( void ){
 			rf_tx_data[9] = rf_tx_data[0];
 			rf_tx_data[9] += rf_tx_data[1];
 			rf_tx_data[9] += rf_tx_data[2];
- 2e4:	e4 ea       	ldi	r30, 0xA4	; 164
+ 2e4:	e3 ea       	ldi	r30, 0xA3	; 163
  2e6:	f1 e0       	ldi	r31, 0x01	; 1
 			break;
 				
@@ -479,9 +479,9 @@ void Device_Task( void ){
 			// Start LoRa TX task.
 			lora_task_flag |= 0x01;
  302:	91 60       	ori	r25, 0x01	; 1
- 304:	90 93 7e 01 	sts	0x017E, r25	; 0x80017e <lora_task_flag>
+ 304:	90 93 7c 01 	sts	0x017C, r25	; 0x80017c <lora_task_flag>
 			lora_tx_task_cnt = 0;			
- 308:	10 92 b0 01 	sts	0x01B0, r1	; 0x8001b0 <lora_tx_task_cnt>
+ 308:	10 92 af 01 	sts	0x01AF, r1	; 0x8001af <lora_tx_task_cnt>
 			// Next task.
 			dev_task_cnt = 0;
  30c:	10 92 b3 01 	sts	0x01B3, r1	; 0x8001b3 <dev_task_cnt>
@@ -502,16 +502,16 @@ void Device_Task( void ){
 void HIHI6130_Measure_Request( void )
 {
 	// SLA.
-    twi0_addr = HIH6130_WR;        
+    twi1_addr = HIH6130_WR;        
  31e:	8e e4       	ldi	r24, 0x4E	; 78
- 320:	80 93 b6 01 	sts	0x01B6, r24	; 0x8001b6 <twi0_addr>
+ 320:	80 93 7d 01 	sts	0x017D, r24	; 0x80017d <twi1_addr>
     // Trigger on write task.
-	TWI0_On_Write();
- 324:	0e 94 78 03 	call	0x6f0	; 0x6f0 <TWI0_On_Write>
+	TWI1_On_Write();
+ 324:	0e 94 78 03 	call	0x6f0	; 0x6f0 <TWI1_On_Write>
 	// Set task count.
-	twi0_task_cnt = 19;
+	twi1_task_cnt = 19;
  328:	83 e1       	ldi	r24, 0x13	; 19
- 32a:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi0_task_cnt>
+ 32a:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
  32e:	08 95       	ret
 
 00000330 <HIH6130_I2C_On_HT>:
@@ -520,16 +520,16 @@ void HIHI6130_Measure_Request( void )
 void HIH6130_I2C_On_HT( void )
 {	
 	// SLA.
-    twi0_addr = HIH6130_RD;        	
+    twi1_addr = HIH6130_RD;        	
  330:	8f e4       	ldi	r24, 0x4F	; 79
- 332:	80 93 b6 01 	sts	0x01B6, r24	; 0x8001b6 <twi0_addr>
+ 332:	80 93 7d 01 	sts	0x017D, r24	; 0x80017d <twi1_addr>
 	// 4 byte to read.
-	twi0_data_cnt = 4;
+	twi1_data_cnt = 4;
  336:	84 e0       	ldi	r24, 0x04	; 4
- 338:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
+ 338:	80 93 b6 01 	sts	0x01B6, r24	; 0x8001b6 <twi1_data_cnt>
 	// Trigger on read task.
-	TWI0_On_Read();	
- 33c:	0e 94 84 03 	call	0x708	; 0x708 <TWI0_On_Read>
+	TWI1_On_Read();	
+ 33c:	0e 94 84 03 	call	0x708	; 0x708 <TWI1_On_Read>
  340:	08 95       	ret
 
 00000342 <IO_Init>:
@@ -566,7 +566,7 @@ void IO_Data_LED_Toggle( void )
  362:	8b b1       	in	r24, 0x0b	; 11
 	temp1 &= 0x20;	
  364:	80 72       	andi	r24, 0x20	; 32
- 366:	80 93 7c 01 	sts	0x017C, r24	; 0x80017c <temp1>
+ 366:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp1>
 	if( temp1 ){
  36a:	88 23       	and	r24, r24
  36c:	11 f0       	breq	.+4      	; 0x372 <IO_Data_LED_Toggle+0x10>
@@ -596,33 +596,33 @@ void IO_Data_LED_Toggle( void )
  380:	08 95       	ret
 
 00000382 <SX1272_Reg_Access_On>:
- 382:	82 e5       	ldi	r24, 0x52	; 82
+ 382:	89 e4       	ldi	r24, 0x49	; 73
  384:	91 e0       	ldi	r25, 0x01	; 1
- 386:	90 93 a2 01 	sts	0x01A2, r25	; 0x8001a2 <spi_trn_ptr+0x1>
- 38a:	80 93 a1 01 	sts	0x01A1, r24	; 0x8001a1 <spi_trn_ptr>
- 38e:	81 e8       	ldi	r24, 0x81	; 129
+ 386:	90 93 a1 01 	sts	0x01A1, r25	; 0x8001a1 <spi_trn_ptr+0x1>
+ 38a:	80 93 a0 01 	sts	0x01A0, r24	; 0x8001a0 <spi_trn_ptr>
+ 38e:	80 e8       	ldi	r24, 0x80	; 128
  390:	91 e0       	ldi	r25, 0x01	; 1
  392:	90 93 b5 01 	sts	0x01B5, r25	; 0x8001b5 <spi_rec_ptr+0x1>
  396:	80 93 b4 01 	sts	0x01B4, r24	; 0x8001b4 <spi_rec_ptr>
  39a:	82 e0       	ldi	r24, 0x02	; 2
- 39c:	80 93 39 01 	sts	0x0139, r24	; 0x800139 <spi_data_cnt>
+ 39c:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <spi_data_cnt>
  3a0:	0e 94 3e 03 	call	0x67c	; 0x67c <SPI_Trigger_On>
  3a4:	08 95       	ret
 
 000003a6 <LoRa_Tx_Task_Poll>:
- 3a6:	90 91 7e 01 	lds	r25, 0x017E	; 0x80017e <lora_task_flag>
+ 3a6:	90 91 7c 01 	lds	r25, 0x017C	; 0x80017c <lora_task_flag>
  3aa:	89 2f       	mov	r24, r25
  3ac:	81 70       	andi	r24, 0x01	; 1
- 3ae:	80 93 3a 01 	sts	0x013A, r24	; 0x80013a <temp2>
+ 3ae:	80 93 38 01 	sts	0x0138, r24	; 0x800138 <temp2>
  3b2:	88 23       	and	r24, r24
  3b4:	09 f4       	brne	.+2      	; 0x3b8 <LoRa_Tx_Task_Poll+0x12>
  3b6:	a4 c0       	rjmp	.+328    	; 0x500 <__FUSE_REGION_LENGTH__+0x100>
- 3b8:	80 91 51 01 	lds	r24, 0x0151	; 0x800151 <spi_status_flag>
+ 3b8:	80 91 48 01 	lds	r24, 0x0148	; 0x800148 <spi_status_flag>
  3bc:	81 70       	andi	r24, 0x01	; 1
- 3be:	80 93 3a 01 	sts	0x013A, r24	; 0x80013a <temp2>
+ 3be:	80 93 38 01 	sts	0x0138, r24	; 0x800138 <temp2>
  3c2:	81 11       	cpse	r24, r1
  3c4:	9d c0       	rjmp	.+314    	; 0x500 <__FUSE_REGION_LENGTH__+0x100>
- 3c6:	80 91 b0 01 	lds	r24, 0x01B0	; 0x8001b0 <lora_tx_task_cnt>
+ 3c6:	80 91 af 01 	lds	r24, 0x01AF	; 0x8001af <lora_tx_task_cnt>
  3ca:	82 30       	cpi	r24, 0x02	; 2
  3cc:	09 f4       	brne	.+2      	; 0x3d0 <LoRa_Tx_Task_Poll+0x2a>
  3ce:	4d c0       	rjmp	.+154    	; 0x46a <__FUSE_REGION_LENGTH__+0x6a>
@@ -644,14 +644,14 @@ void IO_Data_LED_Toggle( void )
  3ee:	0e 94 b1 01 	call	0x362	; 0x362 <IO_Data_LED_Toggle>
  3f2:	0e 94 bb 01 	call	0x376	; 0x376 <SX1272_TX_Switch_On>
  3f6:	88 e0       	ldi	r24, 0x08	; 8
- 3f8:	80 93 a3 01 	sts	0x01A3, r24	; 0x8001a3 <lora_para_cnt>
- 3fc:	10 92 7f 01 	sts	0x017F, r1	; 0x80017f <lora_para_index>
- 400:	80 91 b0 01 	lds	r24, 0x01B0	; 0x8001b0 <lora_tx_task_cnt>
+ 3f8:	80 93 a2 01 	sts	0x01A2, r24	; 0x8001a2 <lora_para_cnt>
+ 3fc:	10 92 7e 01 	sts	0x017E, r1	; 0x80017e <lora_para_index>
+ 400:	80 91 af 01 	lds	r24, 0x01AF	; 0x8001af <lora_tx_task_cnt>
  404:	8f 5f       	subi	r24, 0xFF	; 255
- 406:	80 93 b0 01 	sts	0x01B0, r24	; 0x8001b0 <lora_tx_task_cnt>
+ 406:	80 93 af 01 	sts	0x01AF, r24	; 0x8001af <lora_tx_task_cnt>
  40a:	08 95       	ret
- 40c:	80 91 7f 01 	lds	r24, 0x017F	; 0x80017f <lora_para_index>
- 410:	a2 e5       	ldi	r26, 0x52	; 82
+ 40c:	80 91 7e 01 	lds	r24, 0x017E	; 0x80017e <lora_para_index>
+ 410:	a9 e4       	ldi	r26, 0x49	; 73
  412:	b1 e0       	ldi	r27, 0x01	; 1
  414:	e8 2f       	mov	r30, r24
  416:	f0 e0       	ldi	r31, 0x00	; 0
@@ -659,7 +659,7 @@ void IO_Data_LED_Toggle( void )
  41a:	ff 4f       	sbci	r31, 0xFF	; 255
  41c:	90 81       	ld	r25, Z
  41e:	9c 93       	st	X, r25
- 420:	90 91 a3 01 	lds	r25, 0x01A3	; 0x8001a3 <lora_para_cnt>
+ 420:	90 91 a2 01 	lds	r25, 0x01A2	; 0x8001a2 <lora_para_cnt>
  424:	e1 e0       	ldi	r30, 0x01	; 1
  426:	e8 0f       	add	r30, r24
  428:	f0 e0       	ldi	r31, 0x00	; 0
@@ -669,66 +669,66 @@ void IO_Data_LED_Toggle( void )
  430:	11 96       	adiw	r26, 0x01	; 1
  432:	2c 93       	st	X, r18
  434:	8e 5f       	subi	r24, 0xFE	; 254
- 436:	80 93 7f 01 	sts	0x017F, r24	; 0x80017f <lora_para_index>
+ 436:	80 93 7e 01 	sts	0x017E, r24	; 0x80017e <lora_para_index>
  43a:	8e ef       	ldi	r24, 0xFE	; 254
  43c:	89 0f       	add	r24, r25
- 43e:	80 93 a3 01 	sts	0x01A3, r24	; 0x8001a3 <lora_para_cnt>
+ 43e:	80 93 a2 01 	sts	0x01A2, r24	; 0x8001a2 <lora_para_cnt>
  442:	0e 94 c1 01 	call	0x382	; 0x382 <SX1272_Reg_Access_On>
- 446:	80 91 a3 01 	lds	r24, 0x01A3	; 0x8001a3 <lora_para_cnt>
+ 446:	80 91 a2 01 	lds	r24, 0x01A2	; 0x8001a2 <lora_para_cnt>
  44a:	81 11       	cpse	r24, r1
  44c:	59 c0       	rjmp	.+178    	; 0x500 <__FUSE_REGION_LENGTH__+0x100>
  44e:	8a e0       	ldi	r24, 0x0A	; 10
- 450:	80 93 a3 01 	sts	0x01A3, r24	; 0x8001a3 <lora_para_cnt>
- 454:	10 92 7f 01 	sts	0x017F, r1	; 0x80017f <lora_para_index>
+ 450:	80 93 a2 01 	sts	0x01A2, r24	; 0x8001a2 <lora_para_cnt>
+ 454:	10 92 7e 01 	sts	0x017E, r1	; 0x80017e <lora_para_index>
  458:	80 e8       	ldi	r24, 0x80	; 128
- 45a:	80 93 52 01 	sts	0x0152, r24	; 0x800152 <spi_trn_data>
- 45e:	80 91 b0 01 	lds	r24, 0x01B0	; 0x8001b0 <lora_tx_task_cnt>
+ 45a:	80 93 49 01 	sts	0x0149, r24	; 0x800149 <spi_trn_data>
+ 45e:	80 91 af 01 	lds	r24, 0x01AF	; 0x8001af <lora_tx_task_cnt>
  462:	8f 5f       	subi	r24, 0xFF	; 255
- 464:	80 93 b0 01 	sts	0x01B0, r24	; 0x8001b0 <lora_tx_task_cnt>
+ 464:	80 93 af 01 	sts	0x01AF, r24	; 0x8001af <lora_tx_task_cnt>
  468:	08 95       	ret
- 46a:	80 91 7f 01 	lds	r24, 0x017F	; 0x80017f <lora_para_index>
+ 46a:	80 91 7e 01 	lds	r24, 0x017E	; 0x80017e <lora_para_index>
  46e:	e8 2f       	mov	r30, r24
  470:	f0 e0       	ldi	r31, 0x00	; 0
- 472:	ec 55       	subi	r30, 0x5C	; 92
+ 472:	ed 55       	subi	r30, 0x5D	; 93
  474:	fe 4f       	sbci	r31, 0xFE	; 254
  476:	90 81       	ld	r25, Z
- 478:	90 93 53 01 	sts	0x0153, r25	; 0x800153 <spi_trn_data+0x1>
+ 478:	90 93 4a 01 	sts	0x014A, r25	; 0x80014a <spi_trn_data+0x1>
  47c:	8f 5f       	subi	r24, 0xFF	; 255
- 47e:	80 93 7f 01 	sts	0x017F, r24	; 0x80017f <lora_para_index>
- 482:	80 91 a3 01 	lds	r24, 0x01A3	; 0x8001a3 <lora_para_cnt>
+ 47e:	80 93 7e 01 	sts	0x017E, r24	; 0x80017e <lora_para_index>
+ 482:	80 91 a2 01 	lds	r24, 0x01A2	; 0x8001a2 <lora_para_cnt>
  486:	81 50       	subi	r24, 0x01	; 1
- 488:	80 93 a3 01 	sts	0x01A3, r24	; 0x8001a3 <lora_para_cnt>
+ 488:	80 93 a2 01 	sts	0x01A2, r24	; 0x8001a2 <lora_para_cnt>
  48c:	0e 94 c1 01 	call	0x382	; 0x382 <SX1272_Reg_Access_On>
- 490:	80 91 a3 01 	lds	r24, 0x01A3	; 0x8001a3 <lora_para_cnt>
+ 490:	80 91 a2 01 	lds	r24, 0x01A2	; 0x8001a2 <lora_para_cnt>
  494:	81 11       	cpse	r24, r1
  496:	34 c0       	rjmp	.+104    	; 0x500 <__FUSE_REGION_LENGTH__+0x100>
- 498:	80 91 b0 01 	lds	r24, 0x01B0	; 0x8001b0 <lora_tx_task_cnt>
+ 498:	80 91 af 01 	lds	r24, 0x01AF	; 0x8001af <lora_tx_task_cnt>
  49c:	8f 5f       	subi	r24, 0xFF	; 255
- 49e:	80 93 b0 01 	sts	0x01B0, r24	; 0x8001b0 <lora_tx_task_cnt>
+ 49e:	80 93 af 01 	sts	0x01AF, r24	; 0x8001af <lora_tx_task_cnt>
  4a2:	08 95       	ret
- 4a4:	e2 e5       	ldi	r30, 0x52	; 82
+ 4a4:	e9 e4       	ldi	r30, 0x49	; 73
  4a6:	f1 e0       	ldi	r31, 0x01	; 1
  4a8:	81 e8       	ldi	r24, 0x81	; 129
  4aa:	80 83       	st	Z, r24
  4ac:	83 e8       	ldi	r24, 0x83	; 131
  4ae:	81 83       	std	Z+1, r24	; 0x01
  4b0:	0e 94 c1 01 	call	0x382	; 0x382 <SX1272_Reg_Access_On>
- 4b4:	80 91 b0 01 	lds	r24, 0x01B0	; 0x8001b0 <lora_tx_task_cnt>
+ 4b4:	80 91 af 01 	lds	r24, 0x01AF	; 0x8001af <lora_tx_task_cnt>
  4b8:	8f 5f       	subi	r24, 0xFF	; 255
- 4ba:	80 93 b0 01 	sts	0x01B0, r24	; 0x8001b0 <lora_tx_task_cnt>
+ 4ba:	80 93 af 01 	sts	0x01AF, r24	; 0x8001af <lora_tx_task_cnt>
  4be:	08 95       	ret
- 4c0:	e2 e5       	ldi	r30, 0x52	; 82
+ 4c0:	e9 e4       	ldi	r30, 0x49	; 73
  4c2:	f1 e0       	ldi	r31, 0x01	; 1
  4c4:	82 e1       	ldi	r24, 0x12	; 18
  4c6:	80 83       	st	Z, r24
  4c8:	11 82       	std	Z+1, r1	; 0x01
- 4ca:	10 92 82 01 	sts	0x0182, r1	; 0x800182 <spi_rec_data+0x1>
+ 4ca:	10 92 81 01 	sts	0x0181, r1	; 0x800181 <spi_rec_data+0x1>
  4ce:	0e 94 c1 01 	call	0x382	; 0x382 <SX1272_Reg_Access_On>
- 4d2:	80 91 b0 01 	lds	r24, 0x01B0	; 0x8001b0 <lora_tx_task_cnt>
+ 4d2:	80 91 af 01 	lds	r24, 0x01AF	; 0x8001af <lora_tx_task_cnt>
  4d6:	8f 5f       	subi	r24, 0xFF	; 255
- 4d8:	80 93 b0 01 	sts	0x01B0, r24	; 0x8001b0 <lora_tx_task_cnt>
+ 4d8:	80 93 af 01 	sts	0x01AF, r24	; 0x8001af <lora_tx_task_cnt>
  4dc:	08 95       	ret
- 4de:	e1 e8       	ldi	r30, 0x81	; 129
+ 4de:	e0 e8       	ldi	r30, 0x80	; 128
  4e0:	f1 e0       	ldi	r31, 0x01	; 1
  4e2:	81 81       	ldd	r24, Z+1	; 0x01
  4e4:	88 70       	andi	r24, 0x08	; 8
@@ -736,12 +736,12 @@ void IO_Data_LED_Toggle( void )
  4e8:	81 11       	cpse	r24, r1
  4ea:	04 c0       	rjmp	.+8      	; 0x4f4 <__FUSE_REGION_LENGTH__+0xf4>
  4ec:	84 e0       	ldi	r24, 0x04	; 4
- 4ee:	80 93 b0 01 	sts	0x01B0, r24	; 0x8001b0 <lora_tx_task_cnt>
+ 4ee:	80 93 af 01 	sts	0x01AF, r24	; 0x8001af <lora_tx_task_cnt>
  4f2:	08 95       	ret
  4f4:	86 e0       	ldi	r24, 0x06	; 6
- 4f6:	80 93 b0 01 	sts	0x01B0, r24	; 0x8001b0 <lora_tx_task_cnt>
+ 4f6:	80 93 af 01 	sts	0x01AF, r24	; 0x8001af <lora_tx_task_cnt>
  4fa:	9e 7f       	andi	r25, 0xFE	; 254
- 4fc:	90 93 7e 01 	sts	0x017E, r25	; 0x80017e <lora_task_flag>
+ 4fc:	90 93 7c 01 	sts	0x017C, r25	; 0x80017c <lora_task_flag>
  500:	08 95       	ret
 
 00000502 <SX1272_SPI_Loop>:
@@ -752,15 +752,15 @@ void SX1272_SPI_Loop( void )
 	// Task loop.
 	temp2 = 0x01;
  502:	81 e0       	ldi	r24, 0x01	; 1
- 504:	80 93 3a 01 	sts	0x013A, r24	; 0x80013a <temp2>
+ 504:	80 93 38 01 	sts	0x0138, r24	; 0x800138 <temp2>
 	while( temp2 ){
 		SPI_Task();
  508:	0e 94 06 03 	call	0x60c	; 0x60c <SPI_Task>
 		temp2 = spi_status_flag;
 		temp2 &= 0x01;
- 50c:	80 91 51 01 	lds	r24, 0x0151	; 0x800151 <spi_status_flag>
+ 50c:	80 91 48 01 	lds	r24, 0x0148	; 0x800148 <spi_status_flag>
  510:	81 70       	andi	r24, 0x01	; 1
- 512:	80 93 3a 01 	sts	0x013A, r24	; 0x80013a <temp2>
+ 512:	80 93 38 01 	sts	0x0138, r24	; 0x800138 <temp2>
 // SPI transmit loop.
 void SX1272_SPI_Loop( void )
 {
@@ -783,18 +783,18 @@ void SX1272_SPI_Loop( void )
 void SX1272_Reg_Access( void )
 {
 	spi_trn_ptr = spi_trn_data;		// Output data pointer.
- 51c:	82 e5       	ldi	r24, 0x52	; 82
+ 51c:	89 e4       	ldi	r24, 0x49	; 73
  51e:	91 e0       	ldi	r25, 0x01	; 1
- 520:	90 93 a2 01 	sts	0x01A2, r25	; 0x8001a2 <spi_trn_ptr+0x1>
- 524:	80 93 a1 01 	sts	0x01A1, r24	; 0x8001a1 <spi_trn_ptr>
+ 520:	90 93 a1 01 	sts	0x01A1, r25	; 0x8001a1 <spi_trn_ptr+0x1>
+ 524:	80 93 a0 01 	sts	0x01A0, r24	; 0x8001a0 <spi_trn_ptr>
 	spi_rec_ptr = spi_rec_data;     // Received data pointer.
- 528:	81 e8       	ldi	r24, 0x81	; 129
+ 528:	80 e8       	ldi	r24, 0x80	; 128
  52a:	91 e0       	ldi	r25, 0x01	; 1
  52c:	90 93 b5 01 	sts	0x01B5, r25	; 0x8001b5 <spi_rec_ptr+0x1>
  530:	80 93 b4 01 	sts	0x01B4, r24	; 0x8001b4 <spi_rec_ptr>
 	spi_data_cnt = 2;				// 2 byte data.
  534:	82 e0       	ldi	r24, 0x02	; 2
- 536:	80 93 39 01 	sts	0x0139, r24	; 0x800139 <spi_data_cnt>
+ 536:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <spi_data_cnt>
 	SPI_Trigger_On();				// SPI on.
  53a:	0e 94 3e 03 	call	0x67c	; 0x67c <SPI_Trigger_On>
 	SX1272_SPI_Loop();				// SPI loop.
@@ -815,7 +815,7 @@ void LoRa_RF_Init( void )
 	// Set initialize register write data.
 	while( temp3 < 38 ){			
 		spi_trn_data[0] = RF_Init_Data[ temp3 ];
- 54a:	c2 e5       	ldi	r28, 0x52	; 82
+ 54a:	c9 e4       	ldi	r28, 0x49	; 73
  54c:	d1 e0       	ldi	r29, 0x01	; 1
  54e:	e8 2f       	mov	r30, r24
  550:	f0 e0       	ldi	r31, 0x00	; 0
@@ -880,8 +880,8 @@ int main(void)
 	SPI_Init();
  592:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <SPI_Init>
 	// TWI initialize.
-	TWI0_Init();
- 596:	0e 94 74 03 	call	0x6e8	; 0x6e8 <TWI0_Init>
+	TWI1_Init();
+ 596:	0e 94 74 03 	call	0x6e8	; 0x6e8 <TWI1_Init>
 	// Timer #0 initialize.
 	Timer0_Init();
  59a:	0e 94 5e 03 	call	0x6bc	; 0x6bc <Timer0_Init>
@@ -942,14 +942,14 @@ int main(void)
 	temp1 = 0;
 	if( temp1 < 10 ){
 		rf_tx_data[temp1] = 0;
- 5cc:	10 92 a4 01 	sts	0x01A4, r1	; 0x8001a4 <rf_tx_data>
+ 5cc:	10 92 a3 01 	sts	0x01A3, r1	; 0x8001a3 <rf_tx_data>
 		++temp1;
  5d0:	81 e0       	ldi	r24, 0x01	; 1
- 5d2:	80 93 7c 01 	sts	0x017C, r24	; 0x80017c <temp1>
+ 5d2:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp1>
 	}
 	// - TX task count.
 	lora_tx_task_cnt = 0;
- 5d6:	10 92 b0 01 	sts	0x01B0, r1	; 0x8001b0 <lora_tx_task_cnt>
+ 5d6:	10 92 af 01 	sts	0x01AF, r1	; 0x8001af <lora_tx_task_cnt>
 		
 	while (1)
 	{
@@ -960,8 +960,8 @@ int main(void)
 		ADC_Task();
  5de:	0e 94 9d 00 	call	0x13a	; 0x13a <ADC_Task>
 		// TWI task.
-		TWI0_Task();		
- 5e2:	0e 94 90 03 	call	0x720	; 0x720 <TWI0_Task>
+		TWI1_Task();		
+ 5e2:	0e 94 90 03 	call	0x720	; 0x720 <TWI1_Task>
 		// SPI task.
 		SPI_Task();		
  5e6:	0e 94 06 03 	call	0x60c	; 0x60c <SPI_Task>
@@ -994,7 +994,7 @@ int main(void)
 	// For clear interrupt flag bit.
 	temp1 = SPDR1;
  602:	80 91 ae 00 	lds	r24, 0x00AE	; 0x8000ae <__TEXT_REGION_LENGTH__+0x7e00ae>
- 606:	80 93 7c 01 	sts	0x017C, r24	; 0x80017c <temp1>
+ 606:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp1>
  60a:	08 95       	ret
 
 0000060c <SPI_Task>:
@@ -1007,7 +1007,7 @@ void SPI_Task( void )
  60c:	80 91 ad 00 	lds	r24, 0x00AD	; 0x8000ad <__TEXT_REGION_LENGTH__+0x7e00ad>
 	temp1 &= 0x80;	
  610:	80 78       	andi	r24, 0x80	; 128
- 612:	80 93 7c 01 	sts	0x017C, r24	; 0x80017c <temp1>
+ 612:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp1>
 	if( temp1 == 0 ){
  616:	88 23       	and	r24, r24
  618:	81 f1       	breq	.+96     	; 0x67a <SPI_Task+0x6e>
@@ -1027,27 +1027,27 @@ void SPI_Task( void )
  636:	80 93 b4 01 	sts	0x01B4, r24	; 0x8001b4 <spi_rec_ptr>
 	// Check data count.
 	if( spi_data_cnt  ){
- 63a:	80 91 39 01 	lds	r24, 0x0139	; 0x800139 <spi_data_cnt>
+ 63a:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <spi_data_cnt>
  63e:	88 23       	and	r24, r24
  640:	b1 f0       	breq	.+44     	; 0x66e <SPI_Task+0x62>
 		
 		// Transmit data.
 		SPDR1 = *spi_trn_ptr;		
- 642:	e0 91 a1 01 	lds	r30, 0x01A1	; 0x8001a1 <spi_trn_ptr>
- 646:	f0 91 a2 01 	lds	r31, 0x01A2	; 0x8001a2 <spi_trn_ptr+0x1>
+ 642:	e0 91 a0 01 	lds	r30, 0x01A0	; 0x8001a0 <spi_trn_ptr>
+ 646:	f0 91 a1 01 	lds	r31, 0x01A1	; 0x8001a1 <spi_trn_ptr+0x1>
  64a:	80 81       	ld	r24, Z
  64c:	80 93 ae 00 	sts	0x00AE, r24	; 0x8000ae <__TEXT_REGION_LENGTH__+0x7e00ae>
 		// for next data.
 		++spi_trn_ptr;
- 650:	80 91 a1 01 	lds	r24, 0x01A1	; 0x8001a1 <spi_trn_ptr>
- 654:	90 91 a2 01 	lds	r25, 0x01A2	; 0x8001a2 <spi_trn_ptr+0x1>
+ 650:	80 91 a0 01 	lds	r24, 0x01A0	; 0x8001a0 <spi_trn_ptr>
+ 654:	90 91 a1 01 	lds	r25, 0x01A1	; 0x8001a1 <spi_trn_ptr+0x1>
  658:	01 96       	adiw	r24, 0x01	; 1
- 65a:	90 93 a2 01 	sts	0x01A2, r25	; 0x8001a2 <spi_trn_ptr+0x1>
- 65e:	80 93 a1 01 	sts	0x01A1, r24	; 0x8001a1 <spi_trn_ptr>
+ 65a:	90 93 a1 01 	sts	0x01A1, r25	; 0x8001a1 <spi_trn_ptr+0x1>
+ 65e:	80 93 a0 01 	sts	0x01A0, r24	; 0x8001a0 <spi_trn_ptr>
 		--spi_data_cnt;
- 662:	80 91 39 01 	lds	r24, 0x0139	; 0x800139 <spi_data_cnt>
+ 662:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <spi_data_cnt>
  666:	81 50       	subi	r24, 0x01	; 1
- 668:	80 93 39 01 	sts	0x0139, r24	; 0x800139 <spi_data_cnt>
+ 668:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <spi_data_cnt>
 		return;
  66c:	08 95       	ret
 	}
@@ -1056,9 +1056,9 @@ void SPI_Task( void )
  66e:	72 9a       	sbi	0x0e, 2	; 14
 	// Clear busy bit.
 	spi_status_flag &= 0xfe;	
- 670:	80 91 51 01 	lds	r24, 0x0151	; 0x800151 <spi_status_flag>
+ 670:	80 91 48 01 	lds	r24, 0x0148	; 0x800148 <spi_status_flag>
  674:	8e 7f       	andi	r24, 0xFE	; 254
- 676:	80 93 51 01 	sts	0x0151, r24	; 0x800151 <spi_status_flag>
+ 676:	80 93 48 01 	sts	0x0148, r24	; 0x800148 <spi_status_flag>
  67a:	08 95       	ret
 
 0000067c <SPI_Trigger_On>:
@@ -1068,9 +1068,9 @@ void SPI_Trigger_On( void )
 {
 	// Set busy flag bit.
 	spi_status_flag |= 0x01;
- 67c:	80 91 51 01 	lds	r24, 0x0151	; 0x800151 <spi_status_flag>
+ 67c:	80 91 48 01 	lds	r24, 0x0148	; 0x800148 <spi_status_flag>
  680:	81 60       	ori	r24, 0x01	; 1
- 682:	80 93 51 01 	sts	0x0151, r24	; 0x800151 <spi_status_flag>
+ 682:	80 93 48 01 	sts	0x0148, r24	; 0x800148 <spi_status_flag>
 	// SS output active.
 	PORTE &= 0xfb;
  686:	72 98       	cbi	0x0e, 2	; 14
@@ -1080,26 +1080,26 @@ void SPI_Trigger_On( void )
 	// First byte output.
 	// Check data count.
 	if( spi_data_cnt  ){		
- 688:	80 91 39 01 	lds	r24, 0x0139	; 0x800139 <spi_data_cnt>
+ 688:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <spi_data_cnt>
  68c:	88 23       	and	r24, r24
  68e:	a9 f0       	breq	.+42     	; 0x6ba <SPI_Trigger_On+0x3e>
 		// Transmit data.
 		SPDR1 = *spi_trn_ptr;
- 690:	e0 91 a1 01 	lds	r30, 0x01A1	; 0x8001a1 <spi_trn_ptr>
- 694:	f0 91 a2 01 	lds	r31, 0x01A2	; 0x8001a2 <spi_trn_ptr+0x1>
+ 690:	e0 91 a0 01 	lds	r30, 0x01A0	; 0x8001a0 <spi_trn_ptr>
+ 694:	f0 91 a1 01 	lds	r31, 0x01A1	; 0x8001a1 <spi_trn_ptr+0x1>
  698:	80 81       	ld	r24, Z
  69a:	80 93 ae 00 	sts	0x00AE, r24	; 0x8000ae <__TEXT_REGION_LENGTH__+0x7e00ae>
 		// for next data.
 		++spi_trn_ptr;
- 69e:	80 91 a1 01 	lds	r24, 0x01A1	; 0x8001a1 <spi_trn_ptr>
- 6a2:	90 91 a2 01 	lds	r25, 0x01A2	; 0x8001a2 <spi_trn_ptr+0x1>
+ 69e:	80 91 a0 01 	lds	r24, 0x01A0	; 0x8001a0 <spi_trn_ptr>
+ 6a2:	90 91 a1 01 	lds	r25, 0x01A1	; 0x8001a1 <spi_trn_ptr+0x1>
  6a6:	01 96       	adiw	r24, 0x01	; 1
- 6a8:	90 93 a2 01 	sts	0x01A2, r25	; 0x8001a2 <spi_trn_ptr+0x1>
- 6ac:	80 93 a1 01 	sts	0x01A1, r24	; 0x8001a1 <spi_trn_ptr>
+ 6a8:	90 93 a1 01 	sts	0x01A1, r25	; 0x8001a1 <spi_trn_ptr+0x1>
+ 6ac:	80 93 a0 01 	sts	0x01A0, r24	; 0x8001a0 <spi_trn_ptr>
 		--spi_data_cnt;
- 6b0:	80 91 39 01 	lds	r24, 0x0139	; 0x800139 <spi_data_cnt>
+ 6b0:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <spi_data_cnt>
  6b4:	81 50       	subi	r24, 0x01	; 1
- 6b6:	80 93 39 01 	sts	0x0139, r24	; 0x800139 <spi_data_cnt>
+ 6b6:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <spi_data_cnt>
  6ba:	08 95       	ret
 
 000006bc <Timer0_Init>:
@@ -1132,7 +1132,7 @@ void Timer0_Task( void )
  6ca:	85 b3       	in	r24, 0x15	; 21
 	temp1 &= 0x02;
  6cc:	82 70       	andi	r24, 0x02	; 2
- 6ce:	80 93 7c 01 	sts	0x017C, r24	; 0x80017c <temp1>
+ 6ce:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp1>
 	if( temp1 == 0 ){
  6d2:	88 23       	and	r24, r24
  6d4:	41 f0       	breq	.+16     	; 0x6e6 <Timer0_Task+0x1c>
@@ -1153,93 +1153,93 @@ void Timer0_Task( void )
  6e2:	80 93 b7 01 	sts	0x01B7, r24	; 0x8001b7 <delay_cnt>
  6e6:	08 95       	ret
 
-000006e8 <TWI0_Init>:
-// TWI #0 initialize.
-void TWI0_Init( void )
+000006e8 <TWI1_Init>:
+// TWI #1 initialize.
+void TWI1_Init( void )
 {
 	//TWI ( I2C also ).
 	// - 100KHz @ 8MHz.
-	TWBR0 = 32;
+	TWBR1 = 32;
  6e8:	80 e2       	ldi	r24, 0x20	; 32
- 6ea:	80 93 b8 00 	sts	0x00B8, r24	; 0x8000b8 <__TEXT_REGION_LENGTH__+0x7e00b8>
+ 6ea:	80 93 d8 00 	sts	0x00D8, r24	; 0x8000d8 <__TEXT_REGION_LENGTH__+0x7e00d8>
  6ee:	08 95       	ret
 
-000006f0 <TWI0_On_Write>:
+000006f0 <TWI1_On_Write>:
 
-// TWI #0 write task trigger on.
-void TWI0_On_Write( void )
+// TWI #1 write task trigger on.
+void TWI1_On_Write( void )
 {
 	// Reset task counter.
-	twi0_task_cnt = 1;
+	twi1_task_cnt = 1;
  6f0:	81 e0       	ldi	r24, 0x01	; 1
- 6f2:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi0_task_cnt>
+ 6f2:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
 	// Set busy flag bit.
-	twi0_task_status |= 0x01;
- 6f6:	80 91 38 01 	lds	r24, 0x0138	; 0x800138 <twi0_task_status>
+	twi1_task_status |= 0x01;
+ 6f6:	80 91 6d 01 	lds	r24, 0x016D	; 0x80016d <twi1_task_status>
  6fa:	81 60       	ori	r24, 0x01	; 1
- 6fc:	80 93 38 01 	sts	0x0138, r24	; 0x800138 <twi0_task_status>
+ 6fc:	80 93 6d 01 	sts	0x016D, r24	; 0x80016d <twi1_task_status>
 	// Send start condition.
-	TWCR0 = 0xa4;	
+	TWCR1 = 0xa4;	
  700:	84 ea       	ldi	r24, 0xA4	; 164
- 702:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 702:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
  706:	08 95       	ret
 
-00000708 <TWI0_On_Read>:
+00000708 <TWI1_On_Read>:
 
-// TWI #0 read task trigger on.
-void TWI0_On_Read( void )
+// TWI #1 read task trigger on.
+void TWI1_On_Read( void )
 {
 	// Reset task counter.
-	twi0_task_cnt = 6;
+	twi1_task_cnt = 6;
  708:	86 e0       	ldi	r24, 0x06	; 6
- 70a:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi0_task_cnt>
+ 70a:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
 	// Set busy flag bit.
-	twi0_task_status |= 0x01;	
- 70e:	80 91 38 01 	lds	r24, 0x0138	; 0x800138 <twi0_task_status>
+	twi1_task_status |= 0x01;	
+ 70e:	80 91 6d 01 	lds	r24, 0x016D	; 0x80016d <twi1_task_status>
  712:	81 60       	ori	r24, 0x01	; 1
- 714:	80 93 38 01 	sts	0x0138, r24	; 0x800138 <twi0_task_status>
+ 714:	80 93 6d 01 	sts	0x016D, r24	; 0x80016d <twi1_task_status>
 	// Send start condition.
-	TWCR0 = 0xa4;	
+	TWCR1 = 0xa4;	
  718:	84 ea       	ldi	r24, 0xA4	; 164
- 71a:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 71a:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
  71e:	08 95       	ret
 
-00000720 <TWI0_Task>:
+00000720 <TWI1_Task>:
 
-// TWI #0 task.
-void TWI0_Task( void )
+// TWI #1 task.
+void TWI1_Task( void )
 {
 	// Check interrupt flag.
-	temp1 = TWCR0;
- 720:	80 91 bc 00 	lds	r24, 0x00BC	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+	temp1 = TWCR1;
+ 720:	80 91 dc 00 	lds	r24, 0x00DC	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
 	temp1 &= 0x80;
  724:	80 78       	andi	r24, 0x80	; 128
- 726:	80 93 7c 01 	sts	0x017C, r24	; 0x80017c <temp1>
+ 726:	80 93 73 01 	sts	0x0173, r24	; 0x800173 <temp1>
 	if( temp1 == 0x00 ){
  72a:	88 23       	and	r24, r24
- 72c:	09 f4       	brne	.+2      	; 0x730 <TWI0_Task+0x10>
- 72e:	c9 c0       	rjmp	.+402    	; 0x8c2 <TWI0_Task+0x1a2>
+ 72c:	09 f4       	brne	.+2      	; 0x730 <TWI1_Task+0x10>
+ 72e:	c9 c0       	rjmp	.+402    	; 0x8c2 <TWI1_Task+0x1a2>
 	}
 	// Clear flag bit.
 	//TWCR |= 0x80;
 	
 	// Get status code.
-	temp1 = TWSR0;
- 730:	20 91 b9 00 	lds	r18, 0x00B9	; 0x8000b9 <__TEXT_REGION_LENGTH__+0x7e00b9>
+	temp1 = TWSR1;
+ 730:	20 91 d9 00 	lds	r18, 0x00D9	; 0x8000d9 <__TEXT_REGION_LENGTH__+0x7e00d9>
 	temp1 &= 0xf8;
  734:	28 7f       	andi	r18, 0xF8	; 248
- 736:	20 93 7c 01 	sts	0x017C, r18	; 0x80017c <temp1>
+ 736:	20 93 73 01 	sts	0x0173, r18	; 0x800173 <temp1>
 	
-	switch( twi0_task_cnt ){
- 73a:	e0 91 37 01 	lds	r30, 0x0137	; 0x800137 <twi0_task_cnt>
+	switch( twi1_task_cnt ){
+ 73a:	e0 91 36 01 	lds	r30, 0x0136	; 0x800136 <__data_end>
  73e:	8e 2f       	mov	r24, r30
  740:	90 e0       	ldi	r25, 0x00	; 0
  742:	fc 01       	movw	r30, r24
  744:	31 97       	sbiw	r30, 0x01	; 1
  746:	e4 31       	cpi	r30, 0x14	; 20
  748:	f1 05       	cpc	r31, r1
- 74a:	08 f0       	brcs	.+2      	; 0x74e <TWI0_Task+0x2e>
- 74c:	ba c0       	rjmp	.+372    	; 0x8c2 <TWI0_Task+0x1a2>
+ 74a:	08 f0       	brcs	.+2      	; 0x74e <TWI1_Task+0x2e>
+ 74c:	ba c0       	rjmp	.+372    	; 0x8c2 <TWI1_Task+0x1a2>
  74e:	e6 5a       	subi	r30, 0xA6	; 166
  750:	ff 4f       	sbci	r31, 0xFF	; 255
  752:	0c 94 84 04 	jmp	0x908	; 0x908 <__tablejump2__>
@@ -1247,19 +1247,19 @@ void TWI0_Task( void )
 		// SLA + W was send.
 		case 12:
 		// Send control word.
-		TWDR0 = twi0_word;
- 756:	80 91 7d 01 	lds	r24, 0x017D	; 0x80017d <twi0_word>
- 75a:	80 93 bb 00 	sts	0x00BB, r24	; 0x8000bb <__TEXT_REGION_LENGTH__+0x7e00bb>
+		TWDR1 = twi1_word;
+ 756:	80 91 45 01 	lds	r24, 0x0145	; 0x800145 <twi1_word>
+ 75a:	80 93 db 00 	sts	0x00DB, r24	; 0x8000db <__TEXT_REGION_LENGTH__+0x7e00db>
 		// 1.) Clear interrupt flag,
 		// 2.) and trigger on.
-		TWCR0 = 0x84;
+		TWCR1 = 0x84;
  75e:	84 e8       	ldi	r24, 0x84	; 132
- 760:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 760:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
 		// Next task.
-		++twi0_task_cnt;
- 764:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <twi0_task_cnt>
+		++twi1_task_cnt;
+ 764:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <__data_end>
  768:	8f 5f       	subi	r24, 0xFF	; 255
- 76a:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi0_task_cnt>
+ 76a:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
 		break;
  76e:	08 95       	ret
 		case 13:
@@ -1267,14 +1267,14 @@ void TWI0_Task( void )
 		// 1.) Clear interrupt flag,
 		// 2.) Start condition.
 		// 3.) and trigger on.
-		TWCR0 = 0xa4;
+		TWCR1 = 0xa4;
  770:	84 ea       	ldi	r24, 0xA4	; 164
- 772:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 772:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
 		// Next task.
-		++twi0_task_cnt;
- 776:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <twi0_task_cnt>
+		++twi1_task_cnt;
+ 776:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <__data_end>
  77a:	8f 5f       	subi	r24, 0xFF	; 255
- 77c:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi0_task_cnt>
+ 77c:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
 		break;
  780:	08 95       	ret
 		// SLA+R was send.
@@ -1284,36 +1284,36 @@ void TWI0_Task( void )
 		// NACK
 		if( temp1 == 0x48){
  782:	28 34       	cpi	r18, 0x48	; 72
- 784:	59 f4       	brne	.+22     	; 0x79c <TWI0_Task+0x7c>
+ 784:	59 f4       	brne	.+22     	; 0x79c <TWI1_Task+0x7c>
 			// Stop condition out.
 			// 1.) Clear interrupt flag,
 			// 2.) stop condition,
 			// 3.) trigger on TWI.
-			TWCR0 = 0x94;
+			TWCR1 = 0x94;
  786:	84 e9       	ldi	r24, 0x94	; 148
- 788:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 788:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
 			// Clear flag bit.
-			twi0_task_status &= 0xfe;
- 78c:	80 91 38 01 	lds	r24, 0x0138	; 0x800138 <twi0_task_status>
+			twi1_task_status &= 0xfe;
+ 78c:	80 91 6d 01 	lds	r24, 0x016D	; 0x80016d <twi1_task_status>
  790:	8e 7f       	andi	r24, 0xFE	; 254
- 792:	80 93 38 01 	sts	0x0138, r24	; 0x800138 <twi0_task_status>
+ 792:	80 93 6d 01 	sts	0x016D, r24	; 0x80016d <twi1_task_status>
 			// NACK check.
-			twi0_task_cnt = 0;
- 796:	10 92 37 01 	sts	0x0137, r1	; 0x800137 <twi0_task_cnt>
+			twi1_task_cnt = 0;
+ 796:	10 92 36 01 	sts	0x0136, r1	; 0x800136 <__data_end>
 			return;
  79a:	08 95       	ret
 		}
 		// 1.) Clear interrupt flag.
 		// 2.) Prepare received data and return ACK.
 		// 3.) Trigger on.
-		TWCR0 = 0xC4;
+		TWCR1 = 0xC4;
  79c:	84 ec       	ldi	r24, 0xC4	; 196
- 79e:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 79e:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
 		// Next task.
-		++twi0_task_cnt;
- 7a2:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <twi0_task_cnt>
+		++twi1_task_cnt;
+ 7a2:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <__data_end>
  7a6:	8f 5f       	subi	r24, 0xFF	; 255
- 7a8:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi0_task_cnt>
+ 7a8:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
 		break;
  7ac:	08 95       	ret
 		case 16:
@@ -1321,60 +1321,60 @@ void TWI0_Task( void )
 		// check status data received and ACK return.
 		
 		// Hold shifter data.
-		twi0_data[twi0_data_index] = TWDR0;
- 7ae:	80 91 72 01 	lds	r24, 0x0172	; 0x800172 <twi0_data_index>
- 7b2:	90 91 bb 00 	lds	r25, 0x00BB	; 0x8000bb <__TEXT_REGION_LENGTH__+0x7e00bb>
+		twi1_data[twi1_data_index] = TWDR1;
+ 7ae:	80 91 b1 01 	lds	r24, 0x01B1	; 0x8001b1 <twi1_data_index>
+ 7b2:	90 91 db 00 	lds	r25, 0x00DB	; 0x8000db <__TEXT_REGION_LENGTH__+0x7e00db>
  7b6:	e8 2f       	mov	r30, r24
  7b8:	f0 e0       	ldi	r31, 0x00	; 0
- 7ba:	e9 5b       	subi	r30, 0xB9	; 185
+ 7ba:	ec 58       	subi	r30, 0x8C	; 140
  7bc:	fe 4f       	sbci	r31, 0xFE	; 254
  7be:	90 83       	st	Z, r25
 		// Next byte data.
-		++twi0_data_index;
+		++twi1_data_index;
  7c0:	8f 5f       	subi	r24, 0xFF	; 255
- 7c2:	80 93 72 01 	sts	0x0172, r24	; 0x800172 <twi0_data_index>
-		--twi0_data_cnt;
- 7c6:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <__data_end>
+ 7c2:	80 93 b1 01 	sts	0x01B1, r24	; 0x8001b1 <twi1_data_index>
+		--twi1_data_cnt;
+ 7c6:	80 91 b6 01 	lds	r24, 0x01B6	; 0x8001b6 <twi1_data_cnt>
  7ca:	81 50       	subi	r24, 0x01	; 1
- 7cc:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
+ 7cc:	80 93 b6 01 	sts	0x01B6, r24	; 0x8001b6 <twi1_data_cnt>
 		
 		// Check data counter.
-		if( twi0_data_cnt == 1 ){
+		if( twi1_data_cnt == 1 ){
  7d0:	81 30       	cpi	r24, 0x01	; 1
- 7d2:	49 f4       	brne	.+18     	; 0x7e6 <TWI0_Task+0xc6>
+ 7d2:	49 f4       	brne	.+18     	; 0x7e6 <TWI1_Task+0xc6>
 			// Prepare receive first byte data.
 			
 			// 1.) Clear interrupt flag.
 			// 2.) Received data and return NACK.
 			// 3.) Trigger on.
-			TWCR0 = 0x84;
+			TWCR1 = 0x84;
  7d4:	84 e8       	ldi	r24, 0x84	; 132
- 7d6:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 7d6:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
 			// Next task.
-			++twi0_task_cnt;
- 7da:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <twi0_task_cnt>
+			++twi1_task_cnt;
+ 7da:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <__data_end>
  7de:	8f 5f       	subi	r24, 0xFF	; 255
- 7e0:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi0_task_cnt>
+ 7e0:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
  7e4:	08 95       	ret
 		}
 		else{
 			// 1.) Clear interrupt flag.
 			// 2.) Received data and return ACK.
 			// 3.) Trigger on.
-			TWCR0 = 0xC4;
+			TWCR1 = 0xC4;
  7e6:	84 ec       	ldi	r24, 0xC4	; 196
- 7e8:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 7e8:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
  7ec:	08 95       	ret
 
 		// All data received.
 		case 17:
 		case 9:
 		// Hold shifter data.
-		twi0_data[twi0_data_index] = TWDR0;
- 7ee:	80 91 bb 00 	lds	r24, 0x00BB	; 0x8000bb <__TEXT_REGION_LENGTH__+0x7e00bb>
- 7f2:	e0 91 72 01 	lds	r30, 0x0172	; 0x800172 <twi0_data_index>
+		twi1_data[twi1_data_index] = TWDR1;
+ 7ee:	80 91 db 00 	lds	r24, 0x00DB	; 0x8000db <__TEXT_REGION_LENGTH__+0x7e00db>
+ 7f2:	e0 91 b1 01 	lds	r30, 0x01B1	; 0x8001b1 <twi1_data_index>
  7f6:	f0 e0       	ldi	r31, 0x00	; 0
- 7f8:	e9 5b       	subi	r30, 0xB9	; 185
+ 7f8:	ec 58       	subi	r30, 0x8C	; 140
  7fa:	fe 4f       	sbci	r31, 0xFE	; 254
  7fc:	80 83       	st	Z, r24
 		case 3:
@@ -1382,19 +1382,19 @@ void TWI0_Task( void )
 		// 1.) Clear interrupt flag,
 		// 2.) stop condition,
 		// 3.) trigger on TWI.
-		TWCR0 = 0x94;
+		TWCR1 = 0x94;
  7fe:	84 e9       	ldi	r24, 0x94	; 148
- 800:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 800:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
 		// Clear flag bit.
-		twi0_task_status &= 0xfe;
- 804:	80 91 38 01 	lds	r24, 0x0138	; 0x800138 <twi0_task_status>
+		twi1_task_status &= 0xfe;
+ 804:	80 91 6d 01 	lds	r24, 0x016D	; 0x80016d <twi1_task_status>
  808:	8e 7f       	andi	r24, 0xFE	; 254
- 80a:	80 93 38 01 	sts	0x0138, r24	; 0x800138 <twi0_task_status>
+ 80a:	80 93 6d 01 	sts	0x016D, r24	; 0x80016d <twi1_task_status>
 		// Next task.
-		++twi0_task_cnt;
- 80e:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <twi0_task_cnt>
+		++twi1_task_cnt;
+ 80e:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <__data_end>
  812:	8f 5f       	subi	r24, 0xFF	; 255
- 814:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi0_task_cnt>
+ 814:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
 		break;
  818:	08 95       	ret
 		// SLA+W was send or
@@ -1404,63 +1404,63 @@ void TWI0_Task( void )
 		// Only ACK.
 		if( temp1 == 0x18 || temp1 == 0x28 ){
  81a:	28 31       	cpi	r18, 0x18	; 24
- 81c:	11 f0       	breq	.+4      	; 0x822 <TWI0_Task+0x102>
+ 81c:	11 f0       	breq	.+4      	; 0x822 <TWI1_Task+0x102>
  81e:	28 32       	cpi	r18, 0x28	; 40
- 820:	e9 f4       	brne	.+58     	; 0x85c <TWI0_Task+0x13c>
+ 820:	e9 f4       	brne	.+58     	; 0x85c <TWI1_Task+0x13c>
 			// Send data.
-			TWDR0 = twi0_data[twi0_data_index];
- 822:	e0 91 72 01 	lds	r30, 0x0172	; 0x800172 <twi0_data_index>
+			TWDR1 = twi1_data[twi1_data_index];
+ 822:	e0 91 b1 01 	lds	r30, 0x01B1	; 0x8001b1 <twi1_data_index>
  826:	f0 e0       	ldi	r31, 0x00	; 0
- 828:	e9 5b       	subi	r30, 0xB9	; 185
+ 828:	ec 58       	subi	r30, 0x8C	; 140
  82a:	fe 4f       	sbci	r31, 0xFE	; 254
  82c:	80 81       	ld	r24, Z
- 82e:	80 93 bb 00 	sts	0x00BB, r24	; 0x8000bb <__TEXT_REGION_LENGTH__+0x7e00bb>
+ 82e:	80 93 db 00 	sts	0x00DB, r24	; 0x8000db <__TEXT_REGION_LENGTH__+0x7e00db>
 			// 1.) Clear interrupt flag,
 			// 2.) and trigger on.
-			TWCR0 = 0x84;
+			TWCR1 = 0x84;
  832:	84 e8       	ldi	r24, 0x84	; 132
- 834:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 834:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
 			// Next data.
-			--twi0_data_cnt;
- 838:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <__data_end>
+			--twi1_data_cnt;
+ 838:	80 91 b6 01 	lds	r24, 0x01B6	; 0x8001b6 <twi1_data_cnt>
  83c:	81 50       	subi	r24, 0x01	; 1
- 83e:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
-			++twi0_data_index;
- 842:	90 91 72 01 	lds	r25, 0x0172	; 0x800172 <twi0_data_index>
+ 83e:	80 93 b6 01 	sts	0x01B6, r24	; 0x8001b6 <twi1_data_cnt>
+			++twi1_data_index;
+ 842:	90 91 b1 01 	lds	r25, 0x01B1	; 0x8001b1 <twi1_data_index>
  846:	9f 5f       	subi	r25, 0xFF	; 255
- 848:	90 93 72 01 	sts	0x0172, r25	; 0x800172 <twi0_data_index>
-			if( twi0_data_cnt != 0 ){
+ 848:	90 93 b1 01 	sts	0x01B1, r25	; 0x8001b1 <twi1_data_index>
+			if( twi1_data_cnt != 0 ){
  84c:	81 11       	cpse	r24, r1
- 84e:	39 c0       	rjmp	.+114    	; 0x8c2 <TWI0_Task+0x1a2>
+ 84e:	39 c0       	rjmp	.+114    	; 0x8c2 <TWI1_Task+0x1a2>
 				return;
 			}
 			// Next task.
-			++twi0_task_cnt;
- 850:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <twi0_task_cnt>
+			++twi1_task_cnt;
+ 850:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <__data_end>
  854:	8f 5f       	subi	r24, 0xFF	; 255
- 856:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi0_task_cnt>
+ 856:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
 			return;
  85a:	08 95       	ret
 		}
 		else if( temp1 == 0x20 ){
  85c:	20 32       	cpi	r18, 0x20	; 32
- 85e:	41 f4       	brne	.+16     	; 0x870 <TWI0_Task+0x150>
+ 85e:	41 f4       	brne	.+16     	; 0x870 <TWI1_Task+0x150>
 			// Stop condition out.
 			// 1.) Clear interrupt flag,
 			// 2.) stop condition,
 			// 3.) trigger on TWI.
-			TWCR0 = 0x94;
+			TWCR1 = 0x94;
  860:	84 e9       	ldi	r24, 0x94	; 148
- 862:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 862:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
 			// Clear flag bit.
-			twi0_task_status &= 0xfe;
- 866:	80 91 38 01 	lds	r24, 0x0138	; 0x800138 <twi0_task_status>
+			twi1_task_status &= 0xfe;
+ 866:	80 91 6d 01 	lds	r24, 0x016D	; 0x80016d <twi1_task_status>
  86a:	8e 7f       	andi	r24, 0xFE	; 254
- 86c:	80 93 38 01 	sts	0x0138, r24	; 0x800138 <twi0_task_status>
+ 86c:	80 93 6d 01 	sts	0x016D, r24	; 0x80016d <twi1_task_status>
 		}
 		// Error check.
-		twi0_task_cnt = 0;
- 870:	10 92 37 01 	sts	0x0137, r1	; 0x800137 <twi0_task_cnt>
+		twi1_task_cnt = 0;
+ 870:	10 92 36 01 	sts	0x0136, r1	; 0x800136 <__data_end>
 		break;
  874:	08 95       	ret
 		case 20: // <--- for HIH6130 start measurement.
@@ -1468,28 +1468,28 @@ void TWI0_Task( void )
 			// 1.) Clear interrupt flag,
 			// 2.) stop condition,
 			// 3.) trigger on TWI.
-			TWCR0 = 0x94;
+			TWCR1 = 0x94;
  876:	84 e9       	ldi	r24, 0x94	; 148
- 878:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 878:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
 			// Clear flag bit.
-			twi0_task_status &= 0xfe;
- 87c:	80 91 38 01 	lds	r24, 0x0138	; 0x800138 <twi0_task_status>
+			twi1_task_status &= 0xfe;
+ 87c:	80 91 6d 01 	lds	r24, 0x016D	; 0x80016d <twi1_task_status>
  880:	8e 7f       	andi	r24, 0xFE	; 254
- 882:	80 93 38 01 	sts	0x0138, r24	; 0x800138 <twi0_task_status>
+ 882:	80 93 6d 01 	sts	0x016D, r24	; 0x80016d <twi1_task_status>
 			// Next task.
-			++twi0_task_cnt;			
- 886:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <twi0_task_cnt>
+			++twi1_task_cnt;			
+ 886:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <__data_end>
  88a:	8f 5f       	subi	r24, 0xFF	; 255
- 88c:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi0_task_cnt>
+ 88c:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
 			break;
  890:	08 95       	ret
 		
 		// Start condition was send.
 		case 14:
-		twi0_addr |= 0x01;
- 892:	80 91 b6 01 	lds	r24, 0x01B6	; 0x8001b6 <twi0_addr>
+		twi1_addr |= 0x01;
+ 892:	80 91 7d 01 	lds	r24, 0x017D	; 0x80017d <twi1_addr>
  896:	81 60       	ori	r24, 0x01	; 1
- 898:	80 93 b6 01 	sts	0x01B6, r24	; 0x8001b6 <twi0_addr>
+ 898:	80 93 7d 01 	sts	0x017D, r24	; 0x80017d <twi1_addr>
 		case 19:	// <--- for HIH6130 only write SLA + W to start measure.
 		case 11:
 		case 6:
@@ -1497,29 +1497,29 @@ void TWI0_Task( void )
 		// Error check.
 		if( temp1 != 0x08 ){
  89c:	28 30       	cpi	r18, 0x08	; 8
- 89e:	19 f0       	breq	.+6      	; 0x8a6 <TWI0_Task+0x186>
-			twi0_task_cnt = 0;
- 8a0:	10 92 37 01 	sts	0x0137, r1	; 0x800137 <twi0_task_cnt>
+ 89e:	19 f0       	breq	.+6      	; 0x8a6 <TWI1_Task+0x186>
+			twi1_task_cnt = 0;
+ 8a0:	10 92 36 01 	sts	0x0136, r1	; 0x800136 <__data_end>
 			return;
  8a4:	08 95       	ret
 		}
 		// Send SLA + W or SLA + R.
-		TWDR0 = twi0_addr;
- 8a6:	80 91 b6 01 	lds	r24, 0x01B6	; 0x8001b6 <twi0_addr>
- 8aa:	80 93 bb 00 	sts	0x00BB, r24	; 0x8000bb <__TEXT_REGION_LENGTH__+0x7e00bb>
+		TWDR1 = twi1_addr;
+ 8a6:	80 91 7d 01 	lds	r24, 0x017D	; 0x80017d <twi1_addr>
+ 8aa:	80 93 db 00 	sts	0x00DB, r24	; 0x8000db <__TEXT_REGION_LENGTH__+0x7e00db>
 		// 1.) Clear interrupt flag,
 		// 2.) and trigger on.
-		TWCR0 = 0x84;
+		TWCR1 = 0x84;
  8ae:	84 e8       	ldi	r24, 0x84	; 132
- 8b0:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7e00bc>
+ 8b0:	80 93 dc 00 	sts	0x00DC, r24	; 0x8000dc <__TEXT_REGION_LENGTH__+0x7e00dc>
 		// Clear data index.
-		twi0_data_index = 0;
- 8b4:	10 92 72 01 	sts	0x0172, r1	; 0x800172 <twi0_data_index>
+		twi1_data_index = 0;
+ 8b4:	10 92 b1 01 	sts	0x01B1, r1	; 0x8001b1 <twi1_data_index>
 		// Next task.
-		++twi0_task_cnt;
- 8b8:	80 91 37 01 	lds	r24, 0x0137	; 0x800137 <twi0_task_cnt>
+		++twi1_task_cnt;
+ 8b8:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <__data_end>
  8bc:	8f 5f       	subi	r24, 0xFF	; 255
- 8be:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi0_task_cnt>
+ 8be:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <__data_end>
  8c2:	08 95       	ret
 
 000008c4 <__udivmodsi4>:

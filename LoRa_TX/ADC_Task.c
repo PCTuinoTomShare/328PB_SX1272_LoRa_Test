@@ -14,8 +14,8 @@ void ADC_Init( void )
 {
 	// Reference on VACC.
 	// Data right align.
-	// ADC3.
-	ADMUX = 0x63;
+	// ADC5.
+	ADMUX = 0x65;
 	// Power reduction ADC off, for ADC.
 	PRR0 &= 0xfe;
 	// Single conversion ( no auto trigger ). 

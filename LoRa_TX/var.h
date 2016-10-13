@@ -35,13 +35,13 @@ uint8_t lora_para_index;	// SX1272 register address / data index.
 uint8_t rf_tx_data[12];		// TX data.
 uint8_t rf_rx_data[12];		// RX data.
 
-uint8_t twi0_task_cnt;		// TWI #0 task count.
-uint8_t twi0_task_status;	// TWI #0 task status flag.
-uint8_t twi0_data[8];		// TWI #0 data.
-uint8_t twi0_data_index;	// TWI #0 data index.
-uint8_t twi0_data_cnt;		// TWI #0 data count.
-uint8_t twi0_addr;			// TWI #0 SLA.
-uint8_t twi0_word;			// TWI #0 control word.
+uint8_t twi1_task_cnt;		// TWI #1 task count.
+uint8_t twi1_task_status;	// TWI #1 task status flag.
+uint8_t twi1_data[8];		// TWI #1 data.
+uint8_t twi1_data_index;	// TWI #1 data index.
+uint8_t twi1_data_cnt;		// TWI #1 data count.
+uint8_t twi1_addr;			// TWI #1 SLA.
+uint8_t twi1_word;			// TWI #1 control word.
 
 uint8_t adc_value;			// ADC converted value.
 
