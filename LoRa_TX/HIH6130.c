@@ -14,11 +14,11 @@
 void HIHI6130_Measure_Request( void )
 {
 	// SLA.
-    twi1_addr = HIH6130_WR;        
+    twi1_addr = HIH6130_WR;
+	// 0 byte to write.
+	twi1_data_cnt = 0;	        
     // Trigger on write task.
 	TWI1_On_Write();
-	// Set task count.
-	twi1_task_cnt = 19;
 }
 
 // Read humidity and temperature data.

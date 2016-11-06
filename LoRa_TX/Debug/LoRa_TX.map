@@ -338,7 +338,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x94c
+.text           0x00000000      0x8f8
  *(.vectors)
  .vectors       0x00000000       0xb4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.106/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
                 0x00000000                __vector_default
@@ -346,45 +346,45 @@ END GROUP
  *(.vectors)
  *(.progmem.gcc*)
  .progmem.gcc_sw_table.TWI1_Task
-                0x000000b4       0x28 TWI_Task.o
-                0x000000dc                . = ALIGN (0x2)
-                0x000000dc                __trampolines_start = .
+                0x000000b4       0xa2 TWI_Task.o
+                0x00000156                . = ALIGN (0x2)
+                0x00000156                __trampolines_start = .
  *(.trampolines)
- .trampolines   0x000000dc        0x0 linker stubs
+ .trampolines   0x00000156        0x0 linker stubs
  *(.trampolines*)
-                0x000000dc                __trampolines_end = .
+                0x00000156                __trampolines_end = .
  *libprintf_flt.a:*(.progmem.data)
  *libc.a:*(.progmem.data)
  *(.progmem*)
-                0x000000dc                . = ALIGN (0x2)
+                0x00000156                . = ALIGN (0x2)
  *(.jumptables)
  *(.jumptables*)
  *(.lowtext)
  *(.lowtext*)
-                0x000000dc                __ctors_start = .
+                0x00000156                __ctors_start = .
  *(.ctors)
-                0x000000dc                __ctors_end = .
-                0x000000dc                __dtors_start = .
+                0x00000156                __ctors_end = .
+                0x00000156                __dtors_start = .
  *(.dtors)
-                0x000000dc                __dtors_end = .
+                0x00000156                __dtors_end = .
  SORT(*)(.ctors)
  SORT(*)(.dtors)
  *(.init0)
- .init0         0x000000dc        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.106/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
-                0x000000dc                __init
+ .init0         0x00000156        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.106/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
+                0x00000156                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x000000dc        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.106/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
+ .init2         0x00000156        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.106/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
  *(.init2)
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x000000e8       0x16 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
-                0x000000e8                __do_copy_data
- .init4         0x000000fe       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
-                0x000000fe                __do_clear_bss
+ .init4         0x00000162       0x16 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_copy_data.o)
+                0x00000162                __do_copy_data
+ .init4         0x00000178       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_clear_bss.o)
+                0x00000178                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
@@ -395,143 +395,143 @@ END GROUP
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x0000010e        0x8 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.106/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
+ .init9         0x00000188        0x8 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.106/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
  *(.init9)
  *(.text)
- .text          0x00000116        0x4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.106/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
-                0x00000116                __vector_38
-                0x00000116                __vector_22
-                0x00000116                __vector_28
-                0x00000116                __vector_1
-                0x00000116                __vector_32
-                0x00000116                __vector_34
-                0x00000116                __vector_24
-                0x00000116                __vector_12
-                0x00000116                __bad_interrupt
-                0x00000116                __vector_6
-                0x00000116                __vector_31
-                0x00000116                __vector_35
-                0x00000116                __vector_39
-                0x00000116                __vector_3
-                0x00000116                __vector_23
-                0x00000116                __vector_30
-                0x00000116                __vector_25
-                0x00000116                __vector_11
-                0x00000116                __vector_13
-                0x00000116                __vector_17
-                0x00000116                __vector_19
-                0x00000116                __vector_7
-                0x00000116                __vector_41
-                0x00000116                __vector_43
-                0x00000116                __vector_27
-                0x00000116                __vector_5
-                0x00000116                __vector_33
-                0x00000116                __vector_37
-                0x00000116                __vector_4
-                0x00000116                __vector_44
-                0x00000116                __vector_9
-                0x00000116                __vector_2
-                0x00000116                __vector_21
-                0x00000116                __vector_15
-                0x00000116                __vector_36
-                0x00000116                __vector_29
-                0x00000116                __vector_40
-                0x00000116                __vector_8
-                0x00000116                __vector_26
-                0x00000116                __vector_14
-                0x00000116                __vector_10
-                0x00000116                __vector_16
-                0x00000116                __vector_18
-                0x00000116                __vector_20
-                0x00000116                __vector_42
-                0x0000011a                . = ALIGN (0x2)
+ .text          0x00000190        0x4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.106/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
+                0x00000190                __vector_38
+                0x00000190                __vector_22
+                0x00000190                __vector_28
+                0x00000190                __vector_1
+                0x00000190                __vector_32
+                0x00000190                __vector_34
+                0x00000190                __vector_24
+                0x00000190                __vector_12
+                0x00000190                __bad_interrupt
+                0x00000190                __vector_6
+                0x00000190                __vector_31
+                0x00000190                __vector_35
+                0x00000190                __vector_39
+                0x00000190                __vector_3
+                0x00000190                __vector_23
+                0x00000190                __vector_30
+                0x00000190                __vector_25
+                0x00000190                __vector_11
+                0x00000190                __vector_13
+                0x00000190                __vector_17
+                0x00000190                __vector_19
+                0x00000190                __vector_7
+                0x00000190                __vector_41
+                0x00000190                __vector_43
+                0x00000190                __vector_27
+                0x00000190                __vector_5
+                0x00000190                __vector_33
+                0x00000190                __vector_37
+                0x00000190                __vector_4
+                0x00000190                __vector_44
+                0x00000190                __vector_9
+                0x00000190                __vector_2
+                0x00000190                __vector_21
+                0x00000190                __vector_15
+                0x00000190                __vector_36
+                0x00000190                __vector_29
+                0x00000190                __vector_40
+                0x00000190                __vector_8
+                0x00000190                __vector_26
+                0x00000190                __vector_14
+                0x00000190                __vector_10
+                0x00000190                __vector_16
+                0x00000190                __vector_18
+                0x00000190                __vector_20
+                0x00000190                __vector_42
+                0x00000194                . = ALIGN (0x2)
  *(.text.*)
  .text.ADC_Init
-                0x0000011a       0x20 ADC_Task.o
-                0x0000011a                ADC_Init
+                0x00000194       0x20 ADC_Task.o
+                0x00000194                ADC_Init
  .text.ADC_Task
-                0x0000013a       0x28 ADC_Task.o
-                0x0000013a                ADC_Task
+                0x000001b4       0x28 ADC_Task.o
+                0x000001b4                ADC_Task
  .text.Device_Task
-                0x00000162      0x1bc Device_Task.o
-                0x00000162                Device_Task
+                0x000001dc      0x1bc Device_Task.o
+                0x000001dc                Device_Task
  .text.HIHI6130_Measure_Request
-                0x0000031e       0x12 HIH6130.o
-                0x0000031e                HIHI6130_Measure_Request
+                0x00000398       0x10 HIH6130.o
+                0x00000398                HIHI6130_Measure_Request
  .text.HIH6130_I2C_On_HT
-                0x00000330       0x12 HIH6130.o
-                0x00000330                HIH6130_I2C_On_HT
- .text.IO_Init  0x00000342       0x20 IO_Task.o
-                0x00000342                IO_Init
+                0x000003a8       0x12 HIH6130.o
+                0x000003a8                HIH6130_I2C_On_HT
+ .text.IO_Init  0x000003ba       0x20 IO_Task.o
+                0x000003ba                IO_Init
  .text.IO_Data_LED_Toggle
-                0x00000362       0x14 IO_Task.o
-                0x00000362                IO_Data_LED_Toggle
+                0x000003da       0x14 IO_Task.o
+                0x000003da                IO_Data_LED_Toggle
  .text.SX1272_TX_Switch_On
-                0x00000376        0x6 LoRa_Task.o
-                0x00000376                SX1272_TX_Switch_On
+                0x000003ee        0x6 LoRa_Task.o
+                0x000003ee                SX1272_TX_Switch_On
  .text.SX1272_Reset_Off
-                0x0000037c        0x6 LoRa_Task.o
-                0x0000037c                SX1272_Reset_Off
+                0x000003f4        0x6 LoRa_Task.o
+                0x000003f4                SX1272_Reset_Off
  .text.SX1272_Reg_Access_On
-                0x00000382       0x24 LoRa_Task.o
-                0x00000382                SX1272_Reg_Access_On
+                0x000003fa       0x24 LoRa_Task.o
+                0x000003fa                SX1272_Reg_Access_On
  .text.LoRa_Tx_Task_Poll
-                0x000003a6      0x15c LoRa_Task.o
-                0x000003a6                LoRa_Tx_Task_Poll
+                0x0000041e      0x15c LoRa_Task.o
+                0x0000041e                LoRa_Tx_Task_Poll
  .text.SX1272_SPI_Loop
-                0x00000502       0x1a LoRa_Task.o
-                0x00000502                SX1272_SPI_Loop
+                0x0000057a       0x1a LoRa_Task.o
+                0x0000057a                SX1272_SPI_Loop
  .text.SX1272_Reg_Access
-                0x0000051c       0x28 LoRa_Task.o
-                0x0000051c                SX1272_Reg_Access
+                0x00000594       0x28 LoRa_Task.o
+                0x00000594                SX1272_Reg_Access
  .text.LoRa_RF_Init
-                0x00000544       0x3c LoRa_Task.o
-                0x00000544                LoRa_RF_Init
- .text.main     0x00000580       0x74 main.o
-                0x00000580                main
+                0x000005bc       0x3c LoRa_Task.o
+                0x000005bc                LoRa_RF_Init
+ .text.main     0x000005f8       0x74 main.o
+                0x000005f8                main
  .text.SPI_Init
-                0x000005f4       0x18 SPI_Task.o
-                0x000005f4                SPI_Init
+                0x0000066c       0x18 SPI_Task.o
+                0x0000066c                SPI_Init
  .text.SPI_Task
-                0x0000060c       0x70 SPI_Task.o
-                0x0000060c                SPI_Task
+                0x00000684       0x70 SPI_Task.o
+                0x00000684                SPI_Task
  .text.SPI_Trigger_On
-                0x0000067c       0x40 SPI_Task.o
-                0x0000067c                SPI_Trigger_On
+                0x000006f4       0x40 SPI_Task.o
+                0x000006f4                SPI_Trigger_On
  .text.Timer0_Init
-                0x000006bc        0xe Timer_Task.o
-                0x000006bc                Timer0_Init
+                0x00000734        0xe Timer_Task.o
+                0x00000734                Timer0_Init
  .text.Timer0_Task
-                0x000006ca       0x1e Timer_Task.o
-                0x000006ca                Timer0_Task
+                0x00000742       0x1e Timer_Task.o
+                0x00000742                Timer0_Task
  .text.TWI1_Init
-                0x000006e8        0x8 TWI_Task.o
-                0x000006e8                TWI1_Init
+                0x00000760        0x8 TWI_Task.o
+                0x00000760                TWI1_Init
  .text.TWI1_On_Write
-                0x000006f0       0x18 TWI_Task.o
-                0x000006f0                TWI1_On_Write
+                0x00000768       0x12 TWI_Task.o
+                0x00000768                TWI1_On_Write
  .text.TWI1_On_Read
-                0x00000708       0x18 TWI_Task.o
-                0x00000708                TWI1_On_Read
+                0x0000077a       0x12 TWI_Task.o
+                0x0000077a                TWI1_On_Read
  .text.TWI1_Task
-                0x00000720      0x1a4 TWI_Task.o
-                0x00000720                TWI1_Task
+                0x0000078c       0xe4 TWI_Task.o
+                0x0000078c                TWI1_Task
  .text.libgcc.div
-                0x000008c4       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
-                0x000008c4                __udivmodsi4
- .text.libgcc   0x00000908        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
-                0x00000908                __tablejump2__
+                0x00000870       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_udivmodsi4.o)
+                0x00000870                __udivmodsi4
+ .text.libgcc   0x000008b4        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_tablejump2.o)
+                0x000008b4                __tablejump2__
  .text.libgcc.mul
-                0x00000914       0x16 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
-                0x00000914                __muluhisi3
+                0x000008c0       0x16 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_muluhisi3.o)
+                0x000008c0                __muluhisi3
  .text.libgcc.mul
-                0x0000092a       0x1e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
-                0x0000092a                __umulhisi3
-                0x00000948                . = ALIGN (0x2)
+                0x000008d6       0x1e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_umulhisi3.o)
+                0x000008d6                __umulhisi3
+                0x000008f4                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000948        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
-                0x00000948                _exit
-                0x00000948                exit
+ .fini9         0x000008f4        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+                0x000008f4                _exit
+                0x000008f4                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -550,11 +550,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000948        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
+ .fini0         0x000008f4        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000094c                _etext = .
+                0x000008f8                _etext = .
 
-.data           0x00800100       0x36 load address 0x0000094c
+.data           0x00800100       0x36 load address 0x000008f8
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -608,8 +608,8 @@ END GROUP
                 0x008001b6                twi1_data_cnt
                 0x008001b7                delay_cnt
                 0x008001b8                PROVIDE (__bss_end, .)
-                0x0000094c                __data_load_start = LOADADDR (.data)
-                0x00000982                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000008f8                __data_load_start = LOADADDR (.data)
+                0x0000092e                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x008001b8        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -738,7 +738,7 @@ END GROUP
  .debug_abbrev  0x0000047d       0x7d Timer_Task.o
  .debug_abbrev  0x000004fa       0x7d TWI_Task.o
 
-.debug_line     0x00000000     0x107a
+.debug_line     0x00000000      0xfae
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000       0xf4 ADC_Task.o
  .debug_line    0x000000f4      0x1d2 Device_Task.o
@@ -748,7 +748,7 @@ END GROUP
  .debug_line    0x000009b3      0x227 main.o
  .debug_line    0x00000bda      0x146 SPI_Task.o
  .debug_line    0x00000d20       0xf0 Timer_Task.o
- .debug_line    0x00000e10      0x26a TWI_Task.o
+ .debug_line    0x00000e10      0x19e TWI_Task.o
 
 .debug_frame    0x00000000      0x2ec
  *(.debug_frame)
